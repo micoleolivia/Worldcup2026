@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>⚽ World Cup 2026 — Family Predictor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+  <!-- LOGIN -->
+  <div id="login-screen">
+    <div class="login-bg"></div>
+    <div class="login-content">
+      <div class="login-badge">FIFA WORLD CUP</div>
+      <h1 class="login-title">2026<br>FAMILY<br>PREDICTOR</h1>
+      <p class="login-sub">Who's playing today?</p>
+      <div id="player-buttons">
+        <button class="player-btn micole-btn" onclick="login('Micole')">
+          <span class="player-icon">🐻</span><span>Micole</span>
+          <span class="player-tag">Admin</span>
+        </button>
+        <button class="player-btn mom-btn" onclick="login('Mom')">
+          <span class="player-icon">🦒</span><span>Mom</span>
+        </button>
+        <button class="player-btn zac-btn" onclick="login('Zac')">
+          <span class="player-icon">🦥</span><span>Zac</span>
+        </button>
+        <button class="player-btn claude-btn" onclick="login('Claude')">
+          <span class="player-icon">🤖</span><span>Claude</span>
+          <span class="player-tag ai-tag">AI</span>
+        </button>
+        <button class="player-btn chatgpt-btn" onclick="login('ChatGPT')">
+          <span class="player-icon">🦾</span><span>ChatGPT</span>
+          <span class="player-tag ai-tag">AI</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="hidden">
+    <header>
+      <div class="header-left">
+        <span class="header-logo">⚽</span>
+        <div>
+          <div class="header-title">WORLD CUP 2026</div>
+          <div id="welcome-msg" class="header-welcome"></div>
+        </div>
+      </div>
+      <nav id="main-nav">
+        <button id="nav-rules"       class="nav-btn" onclick="showSection('rules',event)">Rules</button>
+        <button id="nav-winner"      class="nav-btn" onclick="showSection('winner',event)">🏆 Winner</button>
+        <button id="nav-rankings"    class="nav-btn hidden" onclick="showSection('predictions',event)">Rankings</button>
+        <button id="nav-predictions" class="nav-btn" onclick="showSection('match-predictions',event)">Predictions</button>
+        <button id="nav-scores"      class="nav-btn hidden" onclick="showSection('scores',event)">Results</button>
+        <button id="nav-claude"      class="nav-btn hidden" onclick="showSection('claude-picks',event)">🤖 Picks</button>
+        <button id="nav-chatgpt"     class="nav-btn hidden" onclick="showSection('chatgpt-picks',event)">🦾 Picks</button>
+        <button id="nav-leaderboard" class="nav-btn" onclick="showSection('leaderboard',event)">Leaderboard</button>
+        
+      </nav>
+      <div class="header-actions">
+        <button id="reset-btn" class="reset-btn hidden" onclick="resetEverything()">🗑️ Reset</button>
+        <button class="logout-btn" onclick="logout()">← Switch</button>
+      </div>
+    </header>
+
+    <!-- WINNER PICKER -->
+    <section id="winner" class="section hidden">
+      <div class="section-header">
+        <h2>🏆 Tournament Winner</h2>
+        <p>Who do you think will lift the trophy on July 19th?</p>
+      </div>
+      <div id="winner-container"></div>
+    </section>
+
+    <!-- MATCH PREDICTIONS (human editable / AI view-only) -->
+    <section id="match-predictions" class="section hidden">
+      <div class="section-header">
+        <h2>Match Predictions</h2>
+        <p id="predictions-subtext">Predict the score — locked once saved! Exact score = +3pts, right winner = +1pt</p>
+      </div>
+      <div id="date-filter" class="group-filter"></div>
+      <div id="match-predictions-container"></div>
+    </section>
+
+    <!-- REAL RESULTS (admin) -->
+    <section id="scores" class="section hidden">
+      <div class="section-header">
+        <h2>📋 Real Match Results</h2>
+        <p>Enter actual scores after each match is played</p>
+      </div>
+      <div id="scores-date-filter" class="group-filter"></div>
+      <div id="scores-container"></div>
+    </section>
+
+    <!-- CLAUDE PICKS (admin) -->
+    <section id="claude-picks" class="section hidden">
+      <div class="section-header">
+        <h2>🤖 Claude's Match Picks</h2>
+        <p>Enter Claude's predicted score for each match</p>
+      </div>
+      <div id="claude-date-filter" class="group-filter"></div>
+      <div id="claude-scores-container"></div>
+    </section>
+
+    <!-- CHATGPT PICKS (admin) -->
+    <section id="chatgpt-picks" class="section hidden">
+      <div class="section-header">
+        <h2>🦾 ChatGPT's Match Picks</h2>
+        <p>Enter ChatGPT's predicted score for each match</p>
+      </div>
+      <div id="chatgpt-date-filter" class="group-filter"></div>
+      <div id="chatgpt-scores-container"></div>
+    </section>
+
+    <!-- LEADERBOARD -->
+    <section id="leaderboard" class="section hidden">
+      <div class="section-header">
+        <h2>🏆 Leaderboard</h2>
+        <p>Updated in real time as results come in</p>
+      </div>
+      <div id="leaderboard-container"></div>
+
+      <!-- Coming soon placeholder -->
+      <div id="standings-coming-soon" class="standings-coming-soon hidden">
+        <div class="coming-soon-icon">🗂️</div>
+        <div class="coming-soon-title">Group Standings Accuracy</div>
+        <div class="coming-soon-sub">Unlocks after all 72 group stage matches are played</div>
+      </div>
+
+      <!-- Standings accuracy (after all 72 matches) -->
+      <div id="standings-accuracy-section" class="standings-accuracy-section hidden">
+        <div class="section-divider"><span>🗂️ GROUP STANDINGS ACCURACY</span></div>
+        <p class="accuracy-subtitle">Who predicted the group tables most accurately?</p>
+        <div id="standings-accuracy-container" style="max-width:600px;margin:0 auto 32px;"></div>
+        <h3 class="breakdown-title">Group-by-Group Breakdown</h3>
+        <div id="standings-breakdown-container" class="standings-breakdown-grid"></div>
+        <div id="standings-override-container" class="standings-override-container"></div>
+      </div>
+    </section>
+
+    <!-- RULES -->
+    <section id="rules" class="section hidden">
+      <div class="section-header">
+        <h2>📖 How to Play</h2>
+        <p>Everything you need to know about scoring</p>
+      </div>
+      <div id="rules-container" class="rules-container"></div>
+    </section>
+
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
