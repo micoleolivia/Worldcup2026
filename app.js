@@ -360,12 +360,10 @@ async function resolveBetsForMatch(matchId, actualScore) {
         ? (player.name === 'Claude' ? state.claudeScorePreds[matchId] : state.chatgptScorePreds[matchId])
         : (state.scorePredictions[player.name] || {})[matchId];
 
-      if (pred && pred.home === actual.home && pred.away === actual.away) {
-        // Exact score correct → win 2× bet
-        delta = bet.betAmount * EXACT_BET_MULTIPLIER;
+       if (pred && pred.home === actual.home && pred.away === actual.away) {
+        delta = bet.betAmount * EXACT_BET_WIN_MULTIPLIER;
       } else {
-        // Wrong → lose 2× bet
-        delta = -(bet.betAmount * EXACT_BET_MULTIPLIER);
+        delta = -bet.betAmount;
       }
     } else if (bet.betType === 'winner') {
       // Find the player's score prediction
