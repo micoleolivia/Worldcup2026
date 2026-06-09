@@ -509,7 +509,7 @@ async function login(name) {
   if (isAI) {
     showSection('match-predictions', { target: document.getElementById('nav-predictions') });
   } else {
-    showSection('winner', { target: document.getElementById('nav-winner') });
+    showSection('rules', { target: document.getElementById('nav-rules') });
   }
 
   startLiveListener();
