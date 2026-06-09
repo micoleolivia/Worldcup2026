@@ -1345,7 +1345,7 @@ function renderLeaderboard() {
         if (pred && act) matchPts += scoreMatch(pred, act);
       });
     }
-    return { ...player, matchPts, groupPts, points: matchPts + groupPts };
+    return { ...player, matchPts, groupPts: 0, points: matchPts };
   });
   predScored.sort((a,b) => b.points - a.points);
 
