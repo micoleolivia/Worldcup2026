@@ -1618,16 +1618,16 @@ function renderRules() {
     </div>
     <div class="rules-block">
       <h3>Group Stage Rankings</h3>
-      <p>Before the tournament starts, drag each team into the order you think they'll finish in their group (1st to 4th) and lock in all 12 groups. This doesn't score live points — instead, once all 72 group stage matches are done, we compare everyone's predicted tables against the actual final standings. Who read the groups best? That shows up as an accuracy percentage on the leaderboard.</p>
+      <p>Before the tournament starts, drag each team into the order you think they'll finish in their group (1st to 4th) and lock in all 12 groups.</p>
       <div class="rules-scoring">
-        <div class="rules-score-row"><span class="score-badge gold">✅</span> Exact position — full point</div>
-        <div class="rules-score-row"><span class="score-badge silver">〰️</span> One spot off — half point</div>
-        <div class="rules-score-row"><span class="score-badge neutral">❌</span> More than one off — nothing</div>
+        <div class="rules-score-row"><span class="score-badge gold">✅</span> Exact position = full point</div>
+        <div class="rules-score-row"><span class="score-badge silver">〰️</span> One spot off = half point</div>
+        <div class="rules-score-row"><span class="score-badge neutral">❌</span> More than one off = nothing</div>
       </div>
     </div>
     <div class="rules-block">
       <h3>Score Predictions</h3>
-      <p>Pick the exact final score for each match before it starts. Once you tap Lock, that's it — no take-backs. How it scores:</p>
+      <p>Pick the exact final score for each match before it starts. Once you tap Lock, that's it. How it scores:</p>
       <div class="rules-scoring">
         <div class="rules-score-row"><span class="score-badge gold">+3</span> You nailed the exact score</div>
         <div class="rules-score-row"><span class="score-badge silver">+1</span> Right winner, wrong score</div>
@@ -1638,18 +1638,18 @@ function renderRules() {
       <h3>Betting Pool</h3>
       <p>Everyone starts with <strong>50 betting points</strong>. Once per day, you can put some of those points on the line for one match. Two ways to bet:</p>
       <div class="rules-scoring">
-        <div class="rules-score-row"><span class="score-badge gold">Exact</span> Bet 1–10 pts. Nail the exact score → win 2× your bet. Wrong → lose 2×.</div>
-        <div class="rules-score-row"><span class="score-badge silver">Winner</span> Fixed 2 pt stake. Pick the right winner → +5 pts. Wrong → −5 pts.</div>
+        <div class="rules-score-row"><span class="score-badge gold">Exact</span> Bet up to 10 points. Nail the exact score → win 2× your bet. Get your bet wrong → lose 2×.</div>
+        <div class="rules-score-row"><span class="score-badge silver">Winner</span> Fixed 2 point stake. Pick the right winner → +5 points. Wrong → −5 points.</div>
       </div>
-      <p style="margin-top:10px">Your betting points can never go below zero. One bet per day — choose wisely!</p>
+      <p style="margin-top:10px">Your betting points can never go below zero. One bet per day.</p>
     </div>
     <div class="rules-block">
       <h3>The AI Competitors</h3>
-      <p>Claude and ChatGPT are honorary family members. Their group stage rankings are already locked in — you can view them on the Rankings tab. Every morning, Micole will ask each AI for their score prediction and bet, then enter it on their behalf. Same rules, same scoring.</p>
+      <p>Claude and ChatGPT are honorary family members. Their group stage rankings are already locked in. You can view them on the Rankings tab. Every morning, Micole will ask each AI for their score prediction and bet, then enter it on their behalf. Same rules, same scoring.</p>
     </div>
     <div class="rules-block">
       <h3>Admin Stuff (Micole)</h3>
-      <p>Micole gets extra tabs to enter real match results and the AI score picks and bets. She can also manually override the final group standings if FIFA's tiebreaker rules end up shuffling teams around.</p>
+      <p>Micole gets extra tabs in her profile to enter real match results and the AI score picks and bets. Please don't mess with her tab, it will mess with the data</p>
     </div>
   `;
 }
