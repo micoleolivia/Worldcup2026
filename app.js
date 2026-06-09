@@ -943,7 +943,7 @@ function renderMatchPredictions() {
     const aiIcon = currentUser === 'Claude' ? '🤖' : '🦾';
     const enteredCount = Object.keys(scorePreds).length;
     banner.innerHTML = `
-      <span>${aiIcon} ${currentUser}'s predictions — entered by Micole on their behalf</span>
+      <span>${aiIcon} ${currentUser}'s predictions - entered by Micole on their behalf</span>
       <span class="ai-count">${enteredCount} / ${matches.length} entered</span>
     `;
     container.appendChild(banner);
