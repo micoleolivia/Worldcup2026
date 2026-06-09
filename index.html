@@ -56,9 +56,12 @@
         <button id="nav-winner"      class="nav-btn" onclick="showSection('winner',event)">🏆 Winner</button>
         <button id="nav-rankings"    class="nav-btn" onclick="showSection('group-rankings',event)">Rankings</button>
         <button id="nav-predictions" class="nav-btn" onclick="showSection('match-predictions',event)">Predictions</button>
-        
+
+        <button id="nav-claude-winner" class="nav-btn hidden" onclick="showSection('claude-winner',event)">🤖 Winner</button>
+<button id="nav-chatgpt-winner" class="nav-btn hidden" onclick="showSection('chatgpt-winner',event)">🦾 Winner</button>
          <button id="nav-claude-rankings" class="nav-btn hidden" onclick="showSection('claude-rankings',event)">🤖 Rankings</button>
 <button id="nav-chatgpt-rankings" class="nav-btn hidden" onclick="showSection('chatgpt-rankings',event)">🦾 Rankings</button>
+        
         <button id="nav-claude"      class="nav-btn hidden" onclick="showSection('claude-picks',event)">🤖 Picks</button>
         <button id="nav-chatgpt"     class="nav-btn hidden" onclick="showSection('chatgpt-picks',event)">🦾 Picks</button>
        <button id="nav-scores"      class="nav-btn hidden" onclick="showSection('scores',event)">Results</button>
@@ -91,6 +94,24 @@
         <button class="cta-btn" onclick="savePredictions()">Lock My Rankings 🔒</button>
       </div>
     </section>
+
+    <!-- CLAUDE WINNER (admin) -->
+<section id="claude-winner" class="section hidden">
+  <div class="section-header">
+    <h2>🤖 Claude's Tournament Winner</h2>
+    <p>Set Claude's winner pick</p>
+  </div>
+  <div id="claude-winner-container"></div>
+</section>
+
+<!-- CHATGPT WINNER (admin) -->
+<section id="chatgpt-winner" class="section hidden">
+  <div class="section-header">
+    <h2>🦾 ChatGPT's Tournament Winner</h2>
+    <p>Set ChatGPT's winner pick</p>
+  </div>
+  <div id="chatgpt-winner-container"></div>
+</section>
 <!-- CLAUDE GROUP RANKINGS (admin) -->
 <section id="claude-rankings" class="section hidden">
   <div class="section-header">
