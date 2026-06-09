@@ -1147,6 +1147,7 @@ async function saveActualScore(matchId) {
   showToast('Result saved! ✅','success');
   renderActualScores();
   renderLeaderboard();
+  renderMatchPredictions();
 }
 window.saveActualScore = saveActualScore;
 
