@@ -171,7 +171,7 @@ const PLAYERS = [
   { name: 'Mom',     icon: '🦒', type: 'Human', isAI: false },
   { name: 'Zac',     icon: '🦥', type: 'Human', isAI: false },
   { name: 'Claude',  icon: '🤖', type: 'AI',    isAI: true  },
-  { name: 'ChatGPT', icon: '🟢', type: 'AI',    isAI: true  },
+  { name: 'ChatGPT', icon: '🦾', type: 'AI',    isAI: true  },
 ];
 
 // ============================================
@@ -689,7 +689,7 @@ function renderGroups() {
     const preds = currentUser === 'Claude' ? claudeGroupPredictions : chatgptGroupPredictions;
     const banner = document.createElement('div');
     banner.className = 'ai-view-banner';
-    banner.innerHTML = `<span>${currentUser === 'Claude' ? '🤖' : '🟢'} ${currentUser}'s group stage predictions — locked in before the tournament</span>`;
+    banner.innerHTML = `<span>${currentUser === 'Claude' ? '🤖' : '🦾'} ${currentUser}'s group stage predictions — locked in before the tournament</span>`;
     container.appendChild(banner);
 
     const grid = document.createElement('div');
@@ -820,7 +820,7 @@ function renderMatchPredictions() {
   if (isAI) {
     const banner = document.createElement('div');
     banner.className = 'ai-view-banner';
-    const aiIcon = currentUser === 'Claude' ? '🤖' : '🟢';
+    const aiIcon = currentUser === 'Claude' ? '🤖' : '🦾';
     const enteredCount = Object.keys(scorePreds).length;
     banner.innerHTML = `
       <span>${aiIcon} ${currentUser}'s predictions — entered by Micole on their behalf</span>
@@ -860,7 +860,7 @@ function renderMatchPredictions() {
       let predictionHTML;
       if (isAI) {
         if (saved.home !== undefined) {
-          predictionHTML = `<div class="match-locked">${currentUser === 'Claude' ? '🤖' : '🟢'} ${match.home} ${saved.home} – ${saved.away} ${match.away}</div>`;
+          predictionHTML = `<div class="match-locked">${currentUser === 'Claude' ? '🤖' : '🦾'} ${match.home} ${saved.home} – ${saved.away} ${match.away}</div>`;
         } else {
           predictionHTML = `<div class="match-locked" style="opacity:0.4;font-style:italic">Not entered yet</div>`;
         }
@@ -1331,7 +1331,7 @@ function renderLeaderboard() {
     { name:'Mom',     icon:'🦒', type:'Human', groupPreds:state.predictions['Mom'],    scorePreds:state.scorePredictions['Mom'] },
     { name:'Zac',     icon:'🦥', type:'Human', groupPreds:state.predictions['Zac'],    scorePreds:state.scorePredictions['Zac'] },
     { name:'Claude',  icon:'🤖', type:'AI',    groupPreds:claudeGroupPredictions,      scorePreds:state.claudeScorePreds },
-    { name:'ChatGPT', icon:'🟢', type:'AI',    groupPreds:chatgptGroupPredictions,     scorePreds:state.chatgptScorePreds },
+    { name:'ChatGPT', icon:'🦾', type:'AI',    groupPreds:chatgptGroupPredictions,     scorePreds:state.chatgptScorePreds },
   ];
 
   // --- Compute prediction scores ---
@@ -1472,7 +1472,7 @@ function renderStandingsAccuracy() {
     { name:'Mom',     icon:'🦒', preds:state.predictions['Mom'] },
     { name:'Zac',     icon:'🦥', preds:state.predictions['Zac'] },
     { name:'Claude',  icon:'🤖', preds:claudeGroupPredictions },
-    { name:'ChatGPT', icon:'🟢', preds:chatgptGroupPredictions },
+    { name:'ChatGPT', icon:'🦾', preds:chatgptGroupPredictions },
   ];
 
   const scored = playerData.map(p => ({ ...p, ...calcAccuracy(p.preds, official) })).sort((a,b) => b.pct - a.pct);
@@ -1516,7 +1516,7 @@ function renderStandingsAccuracy() {
     card.innerHTML = `
       <h4>Group ${g}</h4>
       <table class="standings-breakdown-table">
-        <thead><tr><th></th><th>Actual</th><th>🐻</th><th>🦒</th><th>🦥</th><th>🤖</th><th>🟢</th></tr></thead>
+        <thead><tr><th></th><th>Actual</th><th>🐻</th><th>🦒</th><th>🦥</th><th>🤖</th><th>🦾</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>`;
     bdContainer.appendChild(card);
