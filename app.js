@@ -171,7 +171,7 @@ const PLAYERS = [
   { name: 'Mom',     icon: '🦒', type: 'Human', isAI: false },
   { name: 'Zac',     icon: '🦥', type: 'Human', isAI: false },
   { name: 'Claude',  icon: '🤖', type: 'AI',    isAI: true  },
-  { name: 'ChatGPT', icon: '🦾', type: 'AI',    isAI: true  },
+  { name: 'ChatGPT', icon: '🟢', type: 'AI',    isAI: true  },
 ];
 
 // ============================================
@@ -477,7 +477,7 @@ async function login(name) {
   document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
 
   document.getElementById('nav-winner').classList.toggle('hidden', isAI);
-  document.getElementById('nav-rankings').classList.add('hidden');
+  document.getElementById('nav-rankings').classList.toggle('hidden', false); // visible for everyone
   document.getElementById('nav-predictions').classList.toggle('hidden', false);
 
   buildDateFilter('date-filter', activeDateFilter, (key) => {
@@ -498,6 +498,7 @@ async function login(name) {
   });
 
   renderWinnerPicker();
+  renderGroups();
   renderMatchPredictions();
   renderActualScores();
   renderClaudeScores();
@@ -508,7 +509,7 @@ async function login(name) {
   if (isAI) {
     showSection('match-predictions', { target: document.getElementById('nav-predictions') });
   } else {
-    showSection('rules', { target: document.getElementById('nav-winner') });
+    showSection('winner', { target: document.getElementById('nav-winner') });
   }
 
   startLiveListener();
@@ -590,7 +591,7 @@ function renderWinnerPicker() {
   const previewBar = document.createElement('div');
   previewBar.id = 'winner-preview-bar';
   previewBar.className = 'winner-preview-bar';
-  previewBar.innerHTML = `<span class="winner-preview-hint">Tap a team to select them</span>`;
+  previewBar.innerHTML = `<span class="winner-preview-hint">👇 Tap a team to select them</span>`;
 
   // Lock button (hidden until a team is selected)
   const lockBtn = document.createElement('button');
@@ -671,7 +672,124 @@ async function lockWinnerPick() {
 window.lockWinnerPick = lockWinnerPick;
 
 // ============================================
-// RENDER MATCH PREDICTIONS
+// RENDER GROUP RANKINGS
+// Drag-to-rank for humans; view-only for AI profiles
+// AI predictions are hardcoded in claudeGroupPredictions / chatgptGroupPredictions
+// ============================================
+function renderGroups() {
+  const container = document.getElementById('groups-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const isAI    = currentUser === 'Claude' || currentUser === 'ChatGPT';
+  const isAdmin = currentUser === 'Micole';
+
+  // AI profiles: show their hardcoded group predictions read-only
+  if (isAI) {
+    const preds = currentUser === 'Claude' ? claudeGroupPredictions : chatgptGroupPredictions;
+    const banner = document.createElement('div');
+    banner.className = 'ai-view-banner';
+    banner.innerHTML = `<span>${currentUser === 'Claude' ? '🤖' : '🟢'} ${currentUser}'s group stage predictions — locked in before the tournament</span>`;
+    container.appendChild(banner);
+
+    const grid = document.createElement('div');
+    grid.className = 'groups-grid';
+    Object.entries(preds).forEach(([groupName, teams]) => {
+      const card = document.createElement('div');
+      card.className = 'group-card';
+      card.innerHTML = `<h3>Group ${groupName}</h3>`;
+      teams.forEach((team, index) => {
+        const item = document.createElement('div');
+        item.className = 'team-item locked';
+        const rankClass = index === 0 ? 'r1' : index === 1 ? 'r2' : index === 2 ? 'r3' : '';
+        item.innerHTML = `<div class="rank-badge ${rankClass}">${index+1}</div><span class="team-flag">${teamFlags[team]||'🏳️'}</span><span class="team-name">${team}</span>`;
+        card.appendChild(item);
+      });
+      grid.appendChild(card);
+    });
+    container.appendChild(grid);
+    return;
+  }
+
+  // Human profiles
+  const saved    = state.predictions[currentUser] || {};
+  const isLocked = state.lockedPredictions[currentUser] === true;
+
+  // Subtext
+  document.getElementById('rankings-subtext').textContent = isLocked
+    ? '🔒 Your group rankings are locked in — good luck!'
+    : 'Drag teams to rank them 1st–4th in each group, then lock in before the tournament starts!';
+
+  // Save bar
+  const saveBar = document.getElementById('save-rankings-bar');
+  if (saveBar) saveBar.style.display = isLocked ? 'none' : 'flex';
+
+  const grid = document.createElement('div');
+  grid.className = 'groups-grid';
+
+  Object.entries(groups).forEach(([groupName, teams]) => {
+    const orderedTeams = saved[groupName] ? saved[groupName] : [...teams];
+    const card = document.createElement('div');
+    card.className = 'group-card';
+    card.innerHTML = `<h3>Group ${groupName}</h3>`;
+    const list = document.createElement('div');
+    list.dataset.group = groupName;
+
+    orderedTeams.forEach((team, index) => {
+      const item = document.createElement('div');
+      item.className = 'team-item' + (isLocked ? ' locked' : '');
+      item.dataset.team = team;
+      const rankClass = index === 0 ? 'r1' : index === 1 ? 'r2' : index === 2 ? 'r3' : '';
+      item.innerHTML = `<div class="rank-badge ${rankClass}">${index+1}</div><span class="team-flag">${teamFlags[team]||'🏳️'}</span><span class="team-name">${team}</span>`;
+      if (!isLocked) {
+        item.draggable = true;
+        item.addEventListener('dragstart', () => item.classList.add('dragging'));
+        item.addEventListener('dragend',   () => { item.classList.remove('dragging'); updateRankBadges(list); });
+      }
+      list.appendChild(item);
+    });
+
+    if (!isLocked) {
+      list.addEventListener('dragover', e => {
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if (!dragging) return;
+        const siblings = [...list.querySelectorAll('.team-item:not(.dragging)')];
+        const next = siblings.find(s => e.clientY <= s.getBoundingClientRect().top + s.offsetHeight / 2);
+        list.insertBefore(dragging, next || null);
+      });
+    }
+
+    card.appendChild(list);
+    if (isLocked) {
+      const badge = document.createElement('div');
+      badge.className = 'locked-badge';
+      badge.innerHTML = '🔒 Rankings locked';
+      card.appendChild(badge);
+    }
+    grid.appendChild(card);
+  });
+
+  container.appendChild(grid);
+}
+
+async function savePredictions() {
+  if (!confirm('Lock your group rankings? This cannot be undone! 🔒')) return;
+  if (!state.predictions[currentUser]) state.predictions[currentUser] = {};
+  Object.keys(groups).forEach(g => {
+    const list = document.querySelector(`[data-group="${g}"]`);
+    if (!list) return;
+    state.predictions[currentUser][g] = [...list.querySelectorAll('.team-item')].map(i => i.dataset.team);
+  });
+  state.lockedPredictions[currentUser] = true;
+  await saveToFirebase('users', { predictions: state.predictions, lockedPredictions: state.lockedPredictions });
+  showToast('Group rankings locked! 🔒', 'success');
+  renderGroups();
+  renderLeaderboard();
+}
+window.savePredictions = savePredictions;
+
+
 // Includes betting UI for human players.
 // AI profiles: view-only of that AI's picks + admin can enter AI bets.
 // ============================================
@@ -702,7 +820,7 @@ function renderMatchPredictions() {
   if (isAI) {
     const banner = document.createElement('div');
     banner.className = 'ai-view-banner';
-    const aiIcon = currentUser === 'Claude' ? '🤖' : '🦾';
+    const aiIcon = currentUser === 'Claude' ? '🤖' : '🟢';
     const enteredCount = Object.keys(scorePreds).length;
     banner.innerHTML = `
       <span>${aiIcon} ${currentUser}'s predictions — entered by Micole on their behalf</span>
@@ -717,9 +835,8 @@ function renderMatchPredictions() {
     dateHeader.textContent = display.split('·')[0].trim();
     container.appendChild(dateHeader);
 
-    // NEW: check if current user (or viewed AI) already has a bet today
-    const viewUser        = isAI ? currentUser : currentUser;
-    const dailyBetMatchId = getBetForDay(viewUser, dateKey); // matchId they bet on today, or null
+    // For daily bet check, always use currentUser (each person's bets are independent)
+    const dailyBetMatchId = getBetForDay(currentUser, dateKey);
 
     const grid = document.createElement('div');
     grid.className = 'matches-grid';
@@ -731,9 +848,9 @@ function renderMatchPredictions() {
         ? (saved.home !== undefined)
         : (state.lockedScorePreds[currentUser]?.[match.id] === true);
 
-      const existingBet    = getBetForMatch(viewUser, match.id);
-      const resultIn       = state.actualScores[match.id] !== undefined;
-      // This match's day already has a bet on a DIFFERENT match → disable betting here
+      const existingBet     = getBetForMatch(currentUser, match.id);
+      const resultIn        = state.actualScores[match.id] !== undefined;
+      // Has this user bet on a DIFFERENT match today?
       const dayBetElsewhere = dailyBetMatchId && dailyBetMatchId !== match.id;
 
       const card = document.createElement('div');
@@ -743,7 +860,7 @@ function renderMatchPredictions() {
       let predictionHTML;
       if (isAI) {
         if (saved.home !== undefined) {
-          predictionHTML = `<div class="match-locked">${currentUser === 'Claude' ? '🤖' : '🦾'} ${match.home} ${saved.home} – ${saved.away} ${match.away}</div>`;
+          predictionHTML = `<div class="match-locked">${currentUser === 'Claude' ? '🤖' : '🟢'} ${match.home} ${saved.home} – ${saved.away} ${match.away}</div>`;
         } else {
           predictionHTML = `<div class="match-locked" style="opacity:0.4;font-style:italic">Not entered yet</div>`;
         }
@@ -760,25 +877,29 @@ function renderMatchPredictions() {
         `;
       }
 
-      // --- NEW: Betting UI HTML ---
+      // --- BETTING UI HTML ---
+      // Priority order:
+      // 1. AI profile view → always show their bet read-only (or nothing if no bet)
+      // 2. User already has a bet on THIS match → show it (resolved or pending)
+      // 3. User already bet on a DIFFERENT match today → show disabled notice
+      // 4. Result is already in AND no bet placed → betting window closed, show notice
+      // 5. Free to bet → show the bet form
       let bettingHTML = '';
 
-      // AI profiles: show their bet (read-only), admin can add bets for them
-      // Human profiles: full betting UI
       if (isAI) {
-        // Read-only bet display for AI profile view
-        bettingHTML = buildBetDisplayHTML(existingBet, match, resultIn, viewUser);
-      } else if (existingBet) {
-        // Bet already placed — show it + result if resolved
+        // AI profile (Claude/ChatGPT login): read-only view of that AI's bet
         bettingHTML = buildBetDisplayHTML(existingBet, match, resultIn, currentUser);
-      } else if (resultIn) {
-        // Result is in, no bet was placed — show nothing
-        bettingHTML = '';
+      } else if (existingBet) {
+        // This user already has a bet on this match — show result/pending
+        bettingHTML = buildBetDisplayHTML(existingBet, match, resultIn, currentUser);
       } else if (dayBetElsewhere) {
-        // Already bet on another match today — show disabled message
-        bettingHTML = `<div class="bet-disabled">🎲 Daily bet used on another match</div>`;
+        // Already used their daily bet on a different match
+        bettingHTML = `<div class="bet-disabled">🎲 Daily bet already used on another match today</div>`;
+      } else if (resultIn) {
+        // Match is over, no bet was placed — betting window has passed
+        bettingHTML = `<div class="bet-disabled">⏰ Betting window closed</div>`;
       } else {
-        // Can place a bet
+        // All clear — show the bet form
         bettingHTML = buildBetFormHTML(match.id, dateKey, currentUser);
       }
 
@@ -1026,7 +1147,6 @@ async function saveActualScore(matchId) {
   showToast('Result saved! ✅','success');
   renderActualScores();
   renderLeaderboard();
-  renderMatchPredictions();
 }
 window.saveActualScore = saveActualScore;
 
@@ -1113,7 +1233,7 @@ function renderAIPicks(containerId, predStore, saveKey, getFilter, btnLabel, btn
 }
 
 function renderClaudeScores()  { renderAIPicks('claude-scores-container',  state.claudeScorePreds,  'claude',  () => activeClaudeFilter,  '🤖 Claude',  'claude-btn',  'Claude'); }
-function renderChatgptScores() { renderAIPicks('chatgpt-scores-container', state.chatgptScorePreds, 'chatgpt', () => activeChatgptFilter, '🦾 ChatGPT', 'chatgpt-btn', 'ChatGPT'); }
+function renderChatgptScores() { renderAIPicks('chatgpt-scores-container', state.chatgptScorePreds, 'chatgpt', () => activeChatgptFilter, '🟢 ChatGPT', 'chatgpt-btn', 'ChatGPT'); }
 
 async function saveAIScore(matchId, aiKey) {
   const home = parseInt(document.getElementById(`${aiKey}-home-${matchId}`)?.value);
@@ -1211,7 +1331,7 @@ function renderLeaderboard() {
     { name:'Mom',     icon:'🦒', type:'Human', groupPreds:state.predictions['Mom'],    scorePreds:state.scorePredictions['Mom'] },
     { name:'Zac',     icon:'🦥', type:'Human', groupPreds:state.predictions['Zac'],    scorePreds:state.scorePredictions['Zac'] },
     { name:'Claude',  icon:'🤖', type:'AI',    groupPreds:claudeGroupPredictions,      scorePreds:state.claudeScorePreds },
-    { name:'ChatGPT', icon:'🦾', type:'AI',    groupPreds:chatgptGroupPredictions,     scorePreds:state.chatgptScorePreds },
+    { name:'ChatGPT', icon:'🟢', type:'AI',    groupPreds:chatgptGroupPredictions,     scorePreds:state.chatgptScorePreds },
   ];
 
   // --- Compute prediction scores ---
@@ -1360,7 +1480,7 @@ function renderStandingsAccuracy() {
     { name:'Mom',     icon:'🦒', preds:state.predictions['Mom'] },
     { name:'Zac',     icon:'🦥', preds:state.predictions['Zac'] },
     { name:'Claude',  icon:'🤖', preds:claudeGroupPredictions },
-    { name:'ChatGPT', icon:'🦾', preds:chatgptGroupPredictions },
+    { name:'ChatGPT', icon:'🟢', preds:chatgptGroupPredictions },
   ];
 
   const scored = playerData.map(p => ({ ...p, ...calcAccuracy(p.preds, official) })).sort((a,b) => b.pct - a.pct);
@@ -1404,7 +1524,7 @@ function renderStandingsAccuracy() {
     card.innerHTML = `
       <h4>Group ${g}</h4>
       <table class="standings-breakdown-table">
-        <thead><tr><th></th><th>Actual</th><th>🐻</th><th>🦒</th><th>🦥</th><th></th><th>🤖</th></tr>🦾</thead>
+        <thead><tr><th></th><th>Actual</th><th>🐻</th><th>🦒</th><th>🦥</th><th>🤖</th><th>🟢</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>`;
     bdContainer.appendChild(card);
@@ -1485,54 +1605,59 @@ async function saveFinalStandings() {
 window.saveFinalStandings = saveFinalStandings;
 
 // ============================================
-// RULES PAGE — includes betting rules
+// RULES PAGE
 // ============================================
 function renderRules() {
   const container = document.getElementById('rules-container');
   if (!container) return;
   container.innerHTML = `
     <div class="rules-block">
-      <h3>Welcome</h3>
-      <p>Welcome!! Pick wisely, bet boldly, and let the chaos begin ⚽</p>
+      <h3>✅ Before the Tournament — Your To-Do List</h3>
+      <p>Before the first match kicks off, make sure you've done all three of these:</p>
+      <div class="rules-scoring">
+        <div class="rules-score-row"><span class="score-badge gold">1</span> Pick your tournament winner on the Winner tab</div>
+        <div class="rules-score-row"><span class="score-badge gold">2</span> Lock in your group stage rankings on the Rankings tab</div>
+        <div class="rules-score-row"><span class="score-badge gold">3</span> Start predicting match scores on the Predictions tab</div>
+      </div>
     </div>
     <div class="rules-block">
-      <h3>Pick Your Champion</h3>
-      <p>Before the tournament kicks off, select one team into the winner slot and lock it in.</p>
+      <h3>🏆 Pick Your Champion</h3>
+      <p>Drag one team into the winner slot and lock it in. You can't change it — so choose wisely. Purely for bragging rights, but bragging rights are everything.</p>
     </div>
     <div class="rules-block">
-      <h3>Score Predictions</h3>
-      <p>Pick the exact final score for each match before it starts. Once you tap Lock, that's it. How it scores:</p>
+      <h3>📊 Group Stage Rankings</h3>
+      <p>Before the tournament starts, drag each team into the order you think they'll finish in their group (1st to 4th). Lock in all 12 groups before the first game! How it scores once all group matches are played:</p>
+      <div class="rules-scoring">
+        <div class="rules-score-row"><span class="score-badge gold">+3</span> Team finishes exactly where you predicted</div>
+        <div class="rules-score-row"><span class="score-badge silver">+1</span> Team finishes one spot off your prediction</div>
+        <div class="rules-score-row"><span class="score-badge neutral">0</span> More than one spot off</div>
+      </div>
+    </div>
+    <div class="rules-block">
+      <h3>⚽ Score Predictions</h3>
+      <p>Pick the exact final score for each match before it starts. Once you tap Lock, that's it — no take-backs. How it scores:</p>
       <div class="rules-scoring">
         <div class="rules-score-row"><span class="score-badge gold">+3</span> You nailed the exact score</div>
         <div class="rules-score-row"><span class="score-badge silver">+1</span> Right winner, wrong score</div>
-        <div class="rules-score-row"><span class="score-badge neutral">0</span> Wrong winner (or wrong draw score)</div>
+        <div class="rules-score-row"><span class="score-badge neutral">0</span> Wrong winner</div>
       </div>
     </div>
     <div class="rules-block">
-      <h3>Betting Pool</h3>
+      <h3>🎲 Betting Pool</h3>
       <p>Everyone starts with <strong>50 betting points</strong>. Once per day, you can put some of those points on the line for one match. Two ways to bet:</p>
       <div class="rules-scoring">
-        <div class="rules-score-row"><span class="score-badge gold">Betting on the exact score</span> Bet up to 10 points. Nail the exact score → win 2× your bet. If you are wrong → lose 2× your bet.</div>
-        <div class="rules-score-row"><span class="score-badge silver">Betting on winner</span> Fixed 2 point stake. Pick the right winner → +5 points. If you are wrong → −5 points.</div>
+        <div class="rules-score-row"><span class="score-badge gold">Exact</span> Bet 1–10 pts. Nail the exact score → win 2× your bet. Wrong → lose 2×.</div>
+        <div class="rules-score-row"><span class="score-badge silver">Winner</span> Fixed 2 pt stake. Pick the right winner → +5 pts. Wrong → −5 pts.</div>
       </div>
-      <p style="margin-top:10px">Your betting points can never go below zero. One bet per day. The betting leaderboard is tracked separately.</p>
+      <p style="margin-top:10px">Your betting points can never go below zero. One bet per day — choose wisely!</p>
     </div>
     <div class="rules-block">
-      <h3>Group Tables Accuracy</h3>
-      <p>Once all 72 group stage matches are done, we'll compare everyone's predicted group tables against how things actually ended up.</p>
-      <div class="rules-scoring">
-        <div class="rules-score-row"><span class="score-badge gold">✅</span> Exact position — full point</div>
-        <div class="rules-score-row"><span class="score-badge silver">〰️</span> One spot off — half point</div>
-        <div class="rules-score-row"><span class="score-badge neutral">❌</span> More than one off — nothing</div>
-      </div>
+      <h3>🤖 The AI Competitors</h3>
+      <p>Claude and ChatGPT are honorary family members. Their group stage rankings are already locked in — you can view them on the Rankings tab. Every morning, Micole will ask each AI for their score prediction and bet, then enter it on their behalf. Same rules, same scoring.</p>
     </div>
     <div class="rules-block">
-      <h3>The AI Competitors</h3>
-      <p>Claude and ChatGPT are honorary family members this tournament. Their group stage table picks are already locked in. Every morning, Micole will ask each AI for their score prediction and bet, then enter it on their behalf, same rules, same scoring. Let's see if they can keep up.</p>
-    </div>
-    <div class="rules-block">
-      <h3>Admin Stuff (Micole)</h3>
-      <p>Micole gets extra tabs to enter real match results and the AI score picks and bets. Please do not mess with her page, it will change all the data.</p>
+      <h3>👑 Admin Stuff (Micole)</h3>
+      <p>Micole gets extra tabs to enter real match results and the AI score picks and bets. She can also manually override the final group standings if FIFA's tiebreaker rules end up shuffling teams around.</p>
     </div>
   `;
 }
@@ -1581,6 +1706,7 @@ async function resetEverything() {
   showLoading(false);
   showToast('🗑️ All data reset!','success');
   renderWinnerPicker();
+  renderGroups();
   renderMatchPredictions();
   renderActualScores();
   renderClaudeScores();
