@@ -712,83 +712,110 @@ function renderGroups() {
   }
 
   // Human profiles
-  const saved    = state.predictions[currentUser] || {};
   const isLocked = state.lockedPredictions[currentUser] === true;
 
-  // Subtext
+  // Keep an in-memory draft so arrow taps persist across card re-renders
+  if (!window._rankingDraft || window._rankingDraftUser !== currentUser) {
+    window._rankingDraft = {};
+    window._rankingDraftUser = currentUser;
+    Object.entries(groups).forEach(([g, teams]) => {
+      window._rankingDraft[g] = state.predictions[currentUser]?.[g]
+        ? [...state.predictions[currentUser][g]]
+        : [...teams];
+    });
+  }
+
   document.getElementById('rankings-subtext').textContent = isLocked
     ? '🔒 Your group rankings are locked in — good luck!'
-    : 'Drag teams to rank them 1st–4th in each group, then lock in before the tournament starts!';
+    : 'Use the arrows to rank teams 1st–4th in each group, then lock in before the tournament starts!';
 
-  // Save bar
   const saveBar = document.getElementById('save-rankings-bar');
   if (saveBar) saveBar.style.display = isLocked ? 'none' : 'flex';
 
   const grid = document.createElement('div');
   grid.className = 'groups-grid';
 
-  Object.entries(groups).forEach(([groupName, teams]) => {
-    const orderedTeams = saved[groupName] ? saved[groupName] : [...teams];
+  function buildGroupCard(groupName) {
+    const orderedTeams = window._rankingDraft[groupName];
     const card = document.createElement('div');
     card.className = 'group-card';
+    card.dataset.groupCard = groupName;
     card.innerHTML = `<h3>Group ${groupName}</h3>`;
-    const list = document.createElement('div');
-    list.dataset.group = groupName;
 
     orderedTeams.forEach((team, index) => {
       const item = document.createElement('div');
       item.className = 'team-item' + (isLocked ? ' locked' : '');
       item.dataset.team = team;
       const rankClass = index === 0 ? 'r1' : index === 1 ? 'r2' : index === 2 ? 'r3' : '';
-      item.innerHTML = `<div class="rank-badge ${rankClass}">${index+1}</div><span class="team-flag">${teamFlags[team]||'🏳️'}</span><span class="team-name">${team}</span>`;
-      if (!isLocked) {
-        item.draggable = true;
-        item.addEventListener('dragstart', () => item.classList.add('dragging'));
-        item.addEventListener('dragend',   () => { item.classList.remove('dragging'); updateRankBadges(list); });
+      if (isLocked) {
+        item.innerHTML = `
+          <div class="rank-badge ${rankClass}">${index+1}</div>
+          <span class="team-flag">${teamFlags[team]||'🏳️'}</span>
+          <span class="team-name">${team}</span>
+        `;
+      } else {
+        const upDisabled   = index === 0 ? 'disabled' : '';
+        const downDisabled = index === orderedTeams.length - 1 ? 'disabled' : '';
+        item.innerHTML = `
+          <div class="rank-badge ${rankClass}">${index+1}</div>
+          <span class="team-flag">${teamFlags[team]||'🏳️'}</span>
+          <span class="team-name">${team}</span>
+          <div class="rank-arrows">
+            <button class="rank-arrow-btn" data-dir="up" data-group="${groupName}" data-index="${index}" ${upDisabled}>▲</button>
+            <button class="rank-arrow-btn" data-dir="down" data-group="${groupName}" data-index="${index}" ${downDisabled}>▼</button>
+          </div>
+        `;
       }
-      list.appendChild(item);
+      card.appendChild(item);
     });
 
-    if (!isLocked) {
-      list.addEventListener('dragover', e => {
-        e.preventDefault();
-        const dragging = document.querySelector('.dragging');
-        if (!dragging) return;
-        const siblings = [...list.querySelectorAll('.team-item:not(.dragging)')];
-        const next = siblings.find(s => e.clientY <= s.getBoundingClientRect().top + s.offsetHeight / 2);
-        list.insertBefore(dragging, next || null);
-      });
-    }
-
-    card.appendChild(list);
     if (isLocked) {
       const badge = document.createElement('div');
       badge.className = 'locked-badge';
       badge.innerHTML = '🔒 Rankings locked';
       card.appendChild(badge);
     }
-    grid.appendChild(card);
-  });
+    return card;
+  }
 
+  Object.keys(groups).forEach(g => grid.appendChild(buildGroupCard(g)));
   container.appendChild(grid);
+
+  if (!isLocked) {
+    container.addEventListener('click', e => {
+      const btn = e.target.closest('.rank-arrow-btn');
+      if (!btn || btn.disabled) return;
+      const g        = btn.dataset.group;
+      const idx      = parseInt(btn.dataset.index);
+      const dir      = btn.dataset.dir;
+      const arr      = window._rankingDraft[g];
+      const swapWith = dir === 'up' ? idx - 1 : idx + 1;
+      if (swapWith < 0 || swapWith >= arr.length) return;
+      [arr[idx], arr[swapWith]] = [arr[swapWith], arr[idx]];
+      const oldCard = container.querySelector(`[data-group-card="${g}"]`);
+      const newCard = buildGroupCard(g);
+      grid.replaceChild(newCard, oldCard);
+    });
+  }
 }
 
 async function savePredictions() {
   if (!confirm('Lock your group rankings? This cannot be undone! 🔒')) return;
   if (!state.predictions[currentUser]) state.predictions[currentUser] = {};
   Object.keys(groups).forEach(g => {
-    const list = document.querySelector(`[data-group="${g}"]`);
-    if (!list) return;
-    state.predictions[currentUser][g] = [...list.querySelectorAll('.team-item')].map(i => i.dataset.team);
+    if (window._rankingDraft?.[g]) {
+      state.predictions[currentUser][g] = [...window._rankingDraft[g]];
+    }
   });
   state.lockedPredictions[currentUser] = true;
+  window._rankingDraft = null;
+  window._rankingDraftUser = null;
   await saveToFirebase('users', { predictions: state.predictions, lockedPredictions: state.lockedPredictions });
   showToast('Group rankings locked! 🔒', 'success');
   renderGroups();
   renderLeaderboard();
 }
 window.savePredictions = savePredictions;
-
 
 // Includes betting UI for human players.
 // AI profiles: view-only of that AI's picks + admin can enter AI bets.
