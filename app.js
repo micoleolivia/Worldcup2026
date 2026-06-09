@@ -142,9 +142,9 @@ const claudeGroupPredictions = {
   'F': ['Netherlands', 'Japan', 'Sweden', 'Tunisia'],
   'G': ['Belgium', 'Iran', 'Egypt', 'New Zealand'],
   'H': ['Spain', 'Uruguay', 'Saudi Arabia', 'Cape Verde'],
-  'I': ['France', 'Senegal', 'Norway', 'DR Congo'],
+  'I': ['France', 'Senegal', 'Norway', 'Iraq'],
   'J': ['Argentina', 'Austria', 'Algeria', 'Jordan'],
-  'K': ['Portugal', 'Colombia', 'Iraq', 'Uzbekistan'],
+  'K': ['Portugal', 'Colombia', 'DR Congo', 'Uzbekistan'],
   'L': ['England', 'Croatia', 'Ghana', 'Panama'],
 };
 
@@ -157,9 +157,9 @@ const chatgptGroupPredictions = {
   'F': ['Netherlands', 'Japan', 'Tunisia', 'Sweden'],
   'G': ['Belgium', 'Egypt', 'Iran', 'New Zealand'],
   'H': ['Spain', 'Uruguay', 'Saudi Arabia', 'Cape Verde'],
-  'I': ['France', 'Senegal', 'Norway', 'DR Congo'],
+  'I': ['France', 'Senegal', 'Norway', 'Iraq'],
   'J': ['Argentina', 'Austria', 'Algeria', 'Jordan'],
-  'K': ['Portugal', 'Colombia', 'Iraq', 'Uzbekistan'],
+  'K': ['Portugal', 'Colombia', 'DR Congo', 'Uzbekistan'],
   'L': ['England', 'Croatia', 'Ghana', 'Panama'],
 };
 
