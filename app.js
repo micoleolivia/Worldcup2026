@@ -512,11 +512,7 @@ document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
   renderLeaderboard();
   renderRules();
 
-  if (isAI) {
-    showSection('match-predictions', { target: document.getElementById('nav-predictions') });
-  } else {
-    showSection('rules', { target: document.getElementById('nav-rules') });
-  }
+  showSection('rules', { target: document.getElementById('nav-rules') });
 
   startLiveListener();
   showLoading(false);
