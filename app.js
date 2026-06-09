@@ -1374,7 +1374,7 @@ function renderLeaderboard() {
         <div class="lb-name">${player.icon} ${player.name}</div>
         <div class="lb-type">${player.type}</div>
         ${hasResults
-          ? `<div class="lb-breakdown">Match: +${player.matchPts}pts &nbsp;|&nbsp; Groups: +${player.groupPts}pts</div>`
+         ? `<div class="lb-breakdown">Match predictions: +${player.matchPts}pts</div>`
           : `<div class="lb-breakdown" style="color:var(--text3);font-style:italic">Waiting for results…</div>`}
       </div>
       <div>
@@ -1618,11 +1618,11 @@ function renderRules() {
     </div>
     <div class="rules-block">
       <h3>Group Stage Rankings</h3>
-      <p>Before the tournament starts, drag each team into the order you think they'll finish in their group (1st to 4th). Lock in all 12 groups before the first game! How it scores once all group matches are played:</p>
+      <p>Before the tournament starts, drag each team into the order you think they'll finish in their group (1st to 4th) and lock in all 12 groups. This doesn't score live points — instead, once all 72 group stage matches are done, we compare everyone's predicted tables against the actual final standings. Who read the groups best? That shows up as an accuracy percentage on the leaderboard.</p>
       <div class="rules-scoring">
-        <div class="rules-score-row"><span class="score-badge gold">+3</span> Team finishes exactly where you predicted</div>
-        <div class="rules-score-row"><span class="score-badge silver">+1</span> Team finishes one spot off your prediction</div>
-        <div class="rules-score-row"><span class="score-badge neutral">0</span> More than one spot off</div>
+        <div class="rules-score-row"><span class="score-badge gold">✅</span> Exact position — full point</div>
+        <div class="rules-score-row"><span class="score-badge silver">〰️</span> One spot off — half point</div>
+        <div class="rules-score-row"><span class="score-badge neutral">❌</span> More than one off — nothing</div>
       </div>
     </div>
     <div class="rules-block">
