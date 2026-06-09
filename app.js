@@ -1354,7 +1354,7 @@ function renderAIPicks(containerId, predStore, saveKey, getFilter, btnLabel, btn
 }
 
 function renderClaudeScores()  { renderAIPicks('claude-scores-container',  state.claudeScorePreds,  'claude',  () => activeClaudeFilter,  '🤖 Claude',  'claude-btn',  'Claude'); }
-function renderChatgptScores() { renderAIPicks('chatgpt-scores-container', state.chatgptScorePreds, 'chatgpt', () => activeChatgptFilter, '🟢 ChatGPT', 'chatgpt-btn', 'ChatGPT'); }
+function renderChatgptScores() { renderAIPicks('chatgpt-scores-container', state.chatgptScorePreds, 'chatgpt', () => activeChatgptFilter, '🦾 ChatGPT', 'chatgpt-btn', 'ChatGPT'); }
 
 async function saveAIScore(matchId, aiKey) {
   const home = parseInt(document.getElementById(`${aiKey}-home-${matchId}`)?.value);
