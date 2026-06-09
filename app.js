@@ -1496,7 +1496,7 @@ function renderRules() {
     </div>
     <div class="rules-block">
       <h3>Pick Your Champion</h3>
-      <p>Before the tournament kicks off, drag one team into the winner slot and lock it in.</p>
+      <p>Before the tournament kicks off, select one team into the winner slot and lock it in.</p>
     </div>
     <div class="rules-block">
       <h3>Score Predictions</h3>
