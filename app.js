@@ -503,6 +503,8 @@ document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
 
   renderWinnerPicker();
   renderGroups();
+  renderAIGroupRankings('claude-rankings-container', 'Claude');
+  renderAIGroupRankings('chatgpt-rankings-container', 'ChatGPT');
   renderMatchPredictions();
   renderActualScores();
   renderClaudeScores();
