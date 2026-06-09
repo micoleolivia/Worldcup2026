@@ -28,8 +28,20 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .player-icon{font-size:2rem}
 .player-tag{font-size:.65rem;font-weight:500;letter-spacing:1px;padding:2px 8px;border-radius:100px;background:rgba(245,197,24,.15);color:var(--gold);border:1px solid rgba(245,197,24,.3)}
 .ai-tag{background:rgba(0,212,170,.15);color:var(--teal);border-color:rgba(0,212,170,.3)}
-.claude-btn:hover{border-color:var(--teal);box-shadow:0 0 30px rgba(0,212,170,.15)}
+.claude-btn{background:var(--card);border-color:rgba(59,130,246,.2)}
+.claude-btn:hover{border-color:var(--blue);box-shadow:0 0 30px rgba(59,130,246,.15)}
+
+.chatgpt-btn{background:var(--card);border-color:rgba(16,163,127,.2)}
 .chatgpt-btn:hover{border-color:var(--green);box-shadow:0 0 30px rgba(16,163,127,.15)}
+
+.mom-btn{background:rgba(168,85,247,.06);border-color:rgba(168,85,247,.2)}
+.mom-btn:hover{border-color:#a855f7;box-shadow:0 0 30px rgba(168,85,247,.15)}
+
+.zac-btn{background:rgba(255,71,87,.06);border-color:rgba(255,71,87,.2)}
+.zac-btn:hover{border-color:var(--red);box-shadow:0 0 30px rgba(255,71,87,.15)}
+
+.micole-btn{background:rgba(245,197,24,.06);border-color:rgba(245,197,24,.2)}
+.micole-btn:hover{border-color:var(--gold);box-shadow:0 0 30px rgba(245,197,24,.15)}
 
 /* HEADER */
 header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:64px;background:rgba(7,9,15,.95);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);gap:12px;flex-wrap:wrap}
