@@ -1337,15 +1337,7 @@ function renderLeaderboard() {
   // --- Compute prediction scores ---
   const predScored = playerData.map(player => {
     let matchPts = 0, groupPts = 0;
-    if (hasResults && player.groupPreds) {
-      Object.keys(groups).forEach(g => {
-        const ids = matches.filter(m => m.group === g).map(m => m.id);
-        const allPlayed = ids.every(id => state.actualScores[id] !== undefined);
-        if (allPlayed && player.groupPreds[g] && actual[g]?.length > 0) {
-          groupPts += scoreGroupRankings(player.groupPreds[g], actual[g]);
-        }
-      });
-    }
+    
     if (player.scorePreds) {
       matches.forEach(match => {
         const pred = player.scorePreds[match.id];
