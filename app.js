@@ -476,6 +476,8 @@ async function login(name) {
   document.getElementById('nav-scores').classList.toggle('hidden', !isAdmin);
 document.getElementById('nav-claude').classList.toggle('hidden', !isAdmin);
 document.getElementById('nav-chatgpt').classList.toggle('hidden', !isAdmin);
+  document.getElementById('nav-claude-winner').classList.toggle('hidden', !isAdmin);
+document.getElementById('nav-chatgpt-winner').classList.toggle('hidden', !isAdmin);
 document.getElementById('nav-claude-rankings').classList.toggle('hidden', !isAdmin);
 document.getElementById('nav-chatgpt-rankings').classList.toggle('hidden', !isAdmin);
 document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
@@ -654,6 +656,118 @@ function renderWinnerPicker() {
   searchWrap.querySelector('#winner-search').addEventListener('input', e => {
     buildTeamsGrid(e.target.value);
   });
+
+  container.appendChild(previewBar);
+  container.appendChild(lockBtn);
+  container.appendChild(searchWrap);
+  container.appendChild(teamsWrap);
+}
+// ============================================
+// AI WINNER PICKER (admin)
+// ============================================
+function renderAIWinnerPicker(containerId, aiName) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+
+  const icon    = aiName === 'Claude' ? '🤖' : '🦾';
+  const myPick  = state.tournamentWinners[aiName];
+
+  // Show current pick if already set
+  if (myPick) {
+    const lockedDiv = document.createElement('div');
+    lockedDiv.className = 'winner-locked';
+    lockedDiv.innerHTML = `
+      <div class="winner-locked-icon">🔒</div>
+      <div class="winner-locked-text">${icon} ${aiName}'s pick is locked in!</div>
+      <div class="winner-locked-pick">${teamFlags[myPick] || ''} ${myPick}</div>
+    `;
+    // Admin can clear and re-pick
+    const clearBtn = document.createElement('button');
+    clearBtn.className = 'cta-btn';
+    clearBtn.style.cssText = 'margin:16px auto;display:block;background:var(--red);box-shadow:none;';
+    clearBtn.textContent = 'Change Pick';
+    clearBtn.onclick = async () => {
+      if (!confirm(`Clear ${aiName}'s winner pick?`)) return;
+      delete state.tournamentWinners[aiName];
+      await saveToFirebase('users', { tournamentWinners: state.tournamentWinners });
+      renderAIWinnerPicker(containerId, aiName);
+      renderWinnerPicker();
+    };
+    container.appendChild(lockedDiv);
+    container.appendChild(clearBtn);
+    return;
+  }
+
+  // Search input
+  const searchWrap = document.createElement('div');
+  searchWrap.className = 'winner-search-wrap';
+  searchWrap.innerHTML = `<input type="text" id="${aiName}-winner-search" class="winner-search" placeholder="🔍 Search a team..."/>`;
+
+  // Preview bar
+  const previewBar = document.createElement('div');
+  previewBar.className = 'winner-preview-bar';
+  previewBar.innerHTML = `<span class="winner-preview-hint">👇 Tap a team to select</span>`;
+
+  // Lock button
+  const lockBtn = document.createElement('button');
+  lockBtn.className = 'cta-btn winner-lock-btn';
+  lockBtn.textContent = `Lock ${icon} ${aiName}'s Pick 🔒`;
+  lockBtn.style.display = 'none';
+  lockBtn.style.cssText += 'margin:12px auto;display:none;';
+
+  let selected = null;
+
+  // Teams grid
+  const teamsWrap = document.createElement('div');
+  teamsWrap.className = 'winner-teams-wrap';
+
+  function buildGrid(filter = '') {
+    teamsWrap.innerHTML = '';
+    const q = filter.toLowerCase().trim();
+    Object.entries(groups).forEach(([g, teams]) => {
+      const filtered = q ? teams.filter(t => t.toLowerCase().includes(q)) : teams;
+      if (filtered.length === 0) return;
+      if (!q) {
+        const label = document.createElement('div');
+        label.className = 'winner-group-label';
+        label.textContent = `Group ${g}`;
+        teamsWrap.appendChild(label);
+      }
+      filtered.forEach(team => {
+        const chip = document.createElement('button');
+        chip.className = 'winner-chip' + (selected === team ? ' selected' : '');
+        chip.innerHTML = `<span class="wc-flag">${teamFlags[team] || ''}</span><span class="wc-name">${team}</span>`;
+        chip.onclick = () => {
+          selected = team;
+          previewBar.innerHTML = `
+            <span class="winner-preview-team">${teamFlags[team] || ''} ${team}</span>
+            <span class="winner-preview-label">selected</span>
+          `;
+          lockBtn.style.display = 'block';
+          teamsWrap.querySelectorAll('.winner-chip').forEach(c => c.classList.remove('selected'));
+          chip.classList.add('selected');
+        };
+        teamsWrap.appendChild(chip);
+      });
+    });
+  }
+
+  buildGrid();
+
+  searchWrap.querySelector(`#${aiName}-winner-search`).addEventListener('input', e => {
+    buildGrid(e.target.value);
+  });
+
+  lockBtn.onclick = async () => {
+    if (!selected) { showToast('Select a team first!', 'error'); return; }
+    if (!confirm(`Lock in ${selected} as ${aiName}'s winner? Cannot be changed without admin override!`)) return;
+    state.tournamentWinners[aiName] = selected;
+    await saveToFirebase('users', { tournamentWinners: state.tournamentWinners });
+    showToast(`${aiName}'s winner locked! 🏆`, 'success');
+    renderAIWinnerPicker(containerId, aiName);
+    renderWinnerPicker();
+  };
 
   container.appendChild(previewBar);
   container.appendChild(lockBtn);
