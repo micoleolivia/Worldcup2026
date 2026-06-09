@@ -28,11 +28,8 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 .player-icon{font-size:2rem}
 .player-tag{font-size:.65rem;font-weight:500;letter-spacing:1px;padding:2px 8px;border-radius:100px;background:rgba(245,197,24,.15);color:var(--gold);border:1px solid rgba(245,197,24,.3)}
 .ai-tag{background:rgba(0,212,170,.15);color:var(--teal);border-color:rgba(0,212,170,.3)}
-.claude-btn:hover{border-color:var(--blue);box-shadow:0 0 30px rgba(59,130,246,.15)}
+.claude-btn:hover{border-color:var(--teal);box-shadow:0 0 30px rgba(0,212,170,.15)}
 .chatgpt-btn:hover{border-color:var(--green);box-shadow:0 0 30px rgba(16,163,127,.15)}
-.mom-btn:hover{border-color:#a855f7;box-shadow:0 0 30px rgba(168,85,247,.15)}
-.zac-btn:hover{border-color:var(--red);box-shadow:0 0 30px rgba(255,71,87,.15)}
-.micole-btn:hover{border-color:var(--gold);box-shadow:0 0 30px rgba(245,197,24,.15)}
 
 /* HEADER */
 header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:64px;background:rgba(7,9,15,.95);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;backdrop-filter:blur(12px);gap:12px;flex-wrap:wrap}
@@ -87,6 +84,9 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 .team-name{font-size:.85rem;font-weight:500;flex:1}
 .locked-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,170,.1);border:1px solid rgba(0,212,170,.3);color:var(--teal);font-size:.72rem;padding:4px 10px;border-radius:100px;margin-top:10px}
 
+/* STICKY SAVE BAR (group rankings) */
+.sticky-save{position:fixed;bottom:0;left:0;right:0;padding:14px 24px;background:linear-gradient(to top,var(--bg) 60%,transparent);display:flex;justify-content:center;z-index:50}
+
 /* CTA BUTTON */
 .cta-btn{background:var(--gold);color:#000;border:none;padding:13px 36px;border-radius:100px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;transition:all .2s;box-shadow:0 4px 20px rgba(245,197,24,.3)}
 .cta-btn:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 6px 28px rgba(245,197,24,.4)}
@@ -113,11 +113,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 .match-result-display{display:flex;align-items:center;justify-content:center;padding:7px 10px;background:rgba(245,197,24,.08);border:1px solid rgba(245,197,24,.2);border-radius:10px;font-size:.82rem;font-weight:600;color:var(--gold);margin-top:8px}
 .save-result-btn{width:100%;padding:9px;background:var(--gold);border:none;border-radius:10px;color:#000;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
 .save-result-btn:hover{background:var(--gold2)}
-.claude-btn{background:var(--card);border-color:rgba(59,130,246,.2)}
-.claude-btn:hover{border-color:var(--blue);box-shadow:0 0 30px rgba(59,130,246,.15)}
-
-.chatgpt-btn{background:var(--card);border-color:rgba(16,163,127,.2)}
-.chatgpt-btn:hover{border-color:var(--green);box-shadow:0 0 30px rgba(16,163,127,.15)}
+.claude-btn{background:var(--teal)!important;color:#000!important}
+.claude-btn:hover{background:#00b894!important}
+.chatgpt-btn{background:var(--green)!important;color:#fff!important}
+.chatgpt-btn:hover{background:#0d8a6a!important}
 .chatgpt-btn-result{background:rgba(16,163,127,.08);border-color:rgba(16,163,127,.25);color:var(--green)}
 
 /* WINNER PICKER — click-to-select with search */
