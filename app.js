@@ -456,6 +456,9 @@ async function login(name) {
   state.claudeScorePreds  = shared.claudeScorePreds    || {};
   state.chatgptScorePreds = shared.chatgptScorePreds   || {};
   state.finalStandings    = shared.finalStandings      || {};
+  // Load saved AI group predictions if they exist
+  if (shared.claudeGroupPreds) Object.assign(claudeGroupPredictions, shared.claudeGroupPreds);
+  if (shared.chatgptGroupPreds) Object.assign(chatgptGroupPredictions, shared.chatgptGroupPreds);
   // NEW: load betting data
   state.bets              = shared.bets               || {};
   state.bettingPoints     = shared.bettingPoints      || {};
