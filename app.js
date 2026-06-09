@@ -505,6 +505,8 @@ document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
 
   renderWinnerPicker();
   renderGroups();
+  renderAIWinnerPicker('claude-winner-container', 'Claude');
+  renderAIWinnerPicker('chatgpt-winner-container', 'ChatGPT');
   renderAIGroupRankings('claude-rankings-container', 'Claude');
   renderAIGroupRankings('chatgpt-rankings-container', 'ChatGPT');
   renderMatchPredictions();
