@@ -1819,6 +1819,8 @@ async function resetEverything() {
   showToast('🗑️ All data reset!','success');
   renderWinnerPicker();
   renderGroups();
+  renderAIGroupRankings('claude-rankings-container', 'Claude');
+  renderAIGroupRankings('chatgpt-rankings-container', 'ChatGPT');
   renderMatchPredictions();
   renderActualScores();
   renderClaudeScores();
