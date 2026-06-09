@@ -1612,7 +1612,7 @@ function renderRules() {
   if (!container) return;
   container.innerHTML = `
     <div class="rules-block">
-      <h3>✅ Before the Tournament — Your To-Do List</h3>
+      <h3>Before the Tournament — Your To-Do List</h3>
       <p>Before the first match kicks off, make sure you've done all three of these:</p>
       <div class="rules-scoring">
         <div class="rules-score-row"><span class="score-badge gold">1</span> Pick your tournament winner on the Winner tab</div>
@@ -1621,11 +1621,11 @@ function renderRules() {
       </div>
     </div>
     <div class="rules-block">
-      <h3>🏆 Pick Your Champion</h3>
-      <p>Drag one team into the winner slot and lock it in. You can't change it — so choose wisely. Purely for bragging rights, but bragging rights are everything.</p>
+      <h3>Pick Your Champion</h3>
+      <p>Drag one team into the winner slot and lock it in. You can't change it.</p>
     </div>
     <div class="rules-block">
-      <h3>📊 Group Stage Rankings</h3>
+      <h3>Group Stage Rankings</h3>
       <p>Before the tournament starts, drag each team into the order you think they'll finish in their group (1st to 4th). Lock in all 12 groups before the first game! How it scores once all group matches are played:</p>
       <div class="rules-scoring">
         <div class="rules-score-row"><span class="score-badge gold">+3</span> Team finishes exactly where you predicted</div>
@@ -1634,7 +1634,7 @@ function renderRules() {
       </div>
     </div>
     <div class="rules-block">
-      <h3>⚽ Score Predictions</h3>
+      <h3>Score Predictions</h3>
       <p>Pick the exact final score for each match before it starts. Once you tap Lock, that's it — no take-backs. How it scores:</p>
       <div class="rules-scoring">
         <div class="rules-score-row"><span class="score-badge gold">+3</span> You nailed the exact score</div>
@@ -1643,7 +1643,7 @@ function renderRules() {
       </div>
     </div>
     <div class="rules-block">
-      <h3>🎲 Betting Pool</h3>
+      <h3>Betting Pool</h3>
       <p>Everyone starts with <strong>50 betting points</strong>. Once per day, you can put some of those points on the line for one match. Two ways to bet:</p>
       <div class="rules-scoring">
         <div class="rules-score-row"><span class="score-badge gold">Exact</span> Bet 1–10 pts. Nail the exact score → win 2× your bet. Wrong → lose 2×.</div>
@@ -1652,11 +1652,11 @@ function renderRules() {
       <p style="margin-top:10px">Your betting points can never go below zero. One bet per day — choose wisely!</p>
     </div>
     <div class="rules-block">
-      <h3>🤖 The AI Competitors</h3>
+      <h3>The AI Competitors</h3>
       <p>Claude and ChatGPT are honorary family members. Their group stage rankings are already locked in — you can view them on the Rankings tab. Every morning, Micole will ask each AI for their score prediction and bet, then enter it on their behalf. Same rules, same scoring.</p>
     </div>
     <div class="rules-block">
-      <h3>👑 Admin Stuff (Micole)</h3>
+      <h3>Admin Stuff (Micole)</h3>
       <p>Micole gets extra tabs to enter real match results and the AI score picks and bets. She can also manually override the final group standings if FIFA's tiebreaker rules end up shuffling teams around.</p>
     </div>
   `;
