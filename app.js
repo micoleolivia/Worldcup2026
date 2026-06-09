@@ -29,9 +29,9 @@ const groups = {
   'F': ['Netherlands', 'Japan', 'Sweden', 'Tunisia'],
   'G': ['Belgium', 'Egypt', 'Iran', 'New Zealand'],
   'H': ['Spain', 'Cape Verde', 'Saudi Arabia', 'Uruguay'],
-  'I': ['France', 'Senegal', 'DR Congo', 'Norway'],
+  'I': ['France', 'Senegal', 'Iraq', 'Norway'],
   'J': ['Argentina', 'Algeria', 'Austria', 'Jordan'],
-  'K': ['Portugal', 'Iraq', 'Uzbekistan', 'Colombia'],
+  'K': ['Portugal', 'DR Congo', 'Uzbekistan', 'Colombia'],
   'L': ['England', 'Croatia', 'Ghana', 'Panama'],
 };
 
