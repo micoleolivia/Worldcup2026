@@ -782,7 +782,7 @@ function renderGroups() {
     const preds = currentUser === 'Claude' ? claudeGroupPredictions : chatgptGroupPredictions;
     const banner = document.createElement('div');
     banner.className = 'ai-view-banner';
-   banner.innerHTML = `<span>${currentUser === 'Claude' ? '🤖' : '🦾'} ${currentUser}'s group stage predictions — enter via Micole's admin tabs</span>`;
+   banner.innerHTML = `<span>${currentUser === 'Claude' ? '🤖' : '🦾'} ${currentUser}'s group stage predictions - entered by Micole on their behalf</span>`;
     container.appendChild(banner);
 
     const grid = document.createElement('div');
