@@ -125,10 +125,10 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 .match-result-display{display:flex;align-items:center;justify-content:center;padding:7px 10px;background:rgba(245,197,24,.08);border:1px solid rgba(245,197,24,.2);border-radius:10px;font-size:.82rem;font-weight:600;color:var(--gold);margin-top:8px}
 .save-result-btn{width:100%;padding:9px;background:var(--gold);border:none;border-radius:10px;color:#000;font-size:.82rem;font-weight:700;cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
 .save-result-btn:hover{background:var(--gold2)}
-.claude-btn{background:var(--teal)!important;color:#000!important}
-.claude-btn:hover{background:#00b894!important}
-.chatgpt-btn{background:var(--green)!important;color:#fff!important}
-.chatgpt-btn:hover{background:#0d8a6a!important}
+.save-result-btn.claude-btn{background:var(--teal)!important;color:#000!important}
+.save-result-btn.claude-btn:hover{background:#00b894!important}
+.save-result-btn.chatgpt-btn{background:var(--green)!important;color:#fff!important}
+.save-result-btn.chatgpt-btn:hover{background:#0d8a6a!important}
 .chatgpt-btn-result{background:rgba(16,163,127,.08);border-color:rgba(16,163,127,.25);color:var(--green)}
 
 /* WINNER PICKER — click-to-select with search */
