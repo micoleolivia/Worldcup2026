@@ -677,6 +677,97 @@ window.lockWinnerPick = lockWinnerPick;
 // Drag-to-rank for humans; view-only for AI profiles
 // AI predictions are hardcoded in claudeGroupPredictions / chatgptGroupPredictions
 // ============================================
+// ============================================
+// RENDER AI GROUP RANKINGS (admin editable)
+// ============================================
+function renderAIGroupRankings(containerId, aiName) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = '';
+
+  const preds = aiName === 'Claude' ? claudeGroupPredictions : chatgptGroupPredictions;
+  const icon  = aiName === 'Claude' ? '🤖' : '🦾';
+
+  // In-memory draft for this AI
+  const draftKey = `_${aiName.toLowerCase()}RankingDraft`;
+  if (!window[draftKey]) {
+    window[draftKey] = {};
+    Object.entries(groups).forEach(([g, teams]) => {
+      window[draftKey][g] = preds[g] ? [...preds[g]] : [...teams];
+    });
+  }
+
+  const grid = document.createElement('div');
+  grid.className = 'groups-grid';
+
+  function buildCard(groupName) {
+    const orderedTeams = window[draftKey][groupName];
+    const card = document.createElement('div');
+    card.className = 'group-card';
+    card.dataset.aiGroupCard = `${aiName}-${groupName}`;
+    card.innerHTML = `<h3>Group ${groupName}</h3>`;
+
+    orderedTeams.forEach((team, index) => {
+      const item = document.createElement('div');
+      item.className = 'team-item';
+      item.dataset.team = team;
+      const rankClass = index === 0 ? 'r1' : index === 1 ? 'r2' : index === 2 ? 'r3' : '';
+      const upDisabled   = index === 0 ? 'disabled' : '';
+      const downDisabled = index === orderedTeams.length - 1 ? 'disabled' : '';
+      item.innerHTML = `
+        <div class="rank-badge ${rankClass}">${index+1}</div>
+        <span class="team-flag">${teamFlags[team]||'🏳️'}</span>
+        <span class="team-name">${team}</span>
+        <div class="rank-arrows">
+          <button class="rank-arrow-btn" data-dir="up" data-group="${groupName}" data-index="${index}" ${upDisabled}>▲</button>
+          <button class="rank-arrow-btn" data-dir="down" data-group="${groupName}" data-index="${index}" ${downDisabled}>▼</button>
+        </div>
+      `;
+      card.appendChild(item);
+    });
+    return card;
+  }
+
+  Object.keys(groups).forEach(g => grid.appendChild(buildCard(g)));
+  container.appendChild(grid);
+
+  // Arrow click handler
+  container.addEventListener('click', e => {
+    const btn = e.target.closest('.rank-arrow-btn');
+    if (!btn || btn.disabled) return;
+    const g        = btn.dataset.group;
+    const idx      = parseInt(btn.dataset.index);
+    const dir      = btn.dataset.dir;
+    const arr      = window[draftKey][g];
+    const swapWith = dir === 'up' ? idx - 1 : idx + 1;
+    if (swapWith < 0 || swapWith >= arr.length) return;
+    [arr[idx], arr[swapWith]] = [arr[swapWith], arr[idx]];
+    const oldCard = container.querySelector(`[data-ai-group-card="${aiName}-${g}"]`);
+    const newCard = buildCard(g);
+    grid.replaceChild(newCard, oldCard);
+  });
+
+  // Save button
+  const saveBtn = document.createElement('button');
+  saveBtn.className = 'cta-btn';
+  saveBtn.style.cssText = 'margin:24px auto;display:block;';
+  saveBtn.textContent = `Save ${icon} ${aiName}'s Rankings 🔒`;
+  saveBtn.onclick = async () => {
+    if (!confirm(`Save ${aiName}'s group rankings? This will update their predictions!`)) return;
+    Object.keys(groups).forEach(g => {
+      if (window[draftKey]?.[g]) {
+        (aiName === 'Claude' ? claudeGroupPredictions : chatgptGroupPredictions)[g] = [...window[draftKey][g]];
+      }
+    });
+    // Persist to Firebase shared doc
+    const key = aiName === 'Claude' ? 'claudeGroupPreds' : 'chatgptGroupPreds';
+    await saveToFirebase('shared', { [key]: window[draftKey] });
+    showToast(`${aiName}'s rankings saved! 🔒`, 'success');
+    renderLeaderboard();
+  };
+  container.appendChild(saveBtn);
+}
+window.renderAIGroupRankings = renderAIGroupRankings;
 function renderGroups() {
   const container = document.getElementById('groups-container');
   if (!container) return;
