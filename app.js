@@ -1666,7 +1666,7 @@ function renderRules() {
       <p>Everyone starts with <strong>50 betting points</strong>. Once per day, you can put some of those points on the line for one match. Two ways to bet:</p>
       <div class="rules-scoring">
          <div class="rules-score-row"><span class="score-badge gold">Exact</span> Bet up to 10 points. Nail the exact score → win 10× your bet. Get it wrong → just lose your stake.</div>
-        <div class="rules-score-row"><span class="score-badge silver">Winner</span> Fixed 2 point stake. Pick the right winner → +5 points. Wrong → −5 points.</div>
+        <div class="rules-score-row"><span class="score-badge silver">Winner</span> Fixed 2 point stake. Pick the right winner → +5 points. Get it wrong → −5 points.</div>
       </div>
       <p style="margin-top:10px">Your betting points can never go below zero. One bet per day.</p>
     </div>
