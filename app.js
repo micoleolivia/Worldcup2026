@@ -471,9 +471,11 @@ async function login(name) {
   const isAI    = name === 'Claude' || name === 'ChatGPT';
 
   document.getElementById('nav-scores').classList.toggle('hidden', !isAdmin);
-  document.getElementById('nav-claude').classList.toggle('hidden', !isAdmin);
-  document.getElementById('nav-chatgpt').classList.toggle('hidden', !isAdmin);
-  document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
+document.getElementById('nav-claude').classList.toggle('hidden', !isAdmin);
+document.getElementById('nav-chatgpt').classList.toggle('hidden', !isAdmin);
+document.getElementById('nav-claude-rankings').classList.toggle('hidden', !isAdmin);
+document.getElementById('nav-chatgpt-rankings').classList.toggle('hidden', !isAdmin);
+document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
 
   document.getElementById('nav-winner').classList.toggle('hidden', isAI);
   document.getElementById('nav-rankings').classList.toggle('hidden', false); // visible for everyone
