@@ -1003,7 +1003,7 @@ function buildBetFormHTML(matchId, dateKey, username) {
         </label>
         <label class="bet-radio-label">
           <input type="radio" name="bet-${matchId}" value="exact" class="bet-radio"/>
-          Exact Score <span class="bet-note">(win/lose 2×)</span>
+          Exact Score <span class="bet-note">(win 10× / lose your stake)</span>
         </label>
         <label class="bet-radio-label bet-exact-amount-label" id="exact-label-${matchId}" style="display:none">
           Bet amount:
