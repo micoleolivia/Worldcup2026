@@ -1926,7 +1926,7 @@ function renderRules() {
     </div>
     <div class="rules-block">
       <h3>Pick Your Champion</h3>
-      <p>Drag one team into the winner slot and lock it in. You can't change it.</p>
+      <p>Select one team into the winner slot and lock it in. You can't change it.</p>
     </div>
     <div class="rules-block">
       <h3>Group Stage Rankings</h3>
