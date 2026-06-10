@@ -926,15 +926,14 @@ function renderGroups() {
   const isLocked = state.lockedPredictions[currentUser] === true;
 
   // Keep an in-memory draft so arrow taps persist across card re-renders
-  if (!window._rankingDraft || window._rankingDraftUser !== currentUser) {
-    window._rankingDraft = {};
-    window._rankingDraftUser = currentUser;
-    Object.entries(groups).forEach(([g, teams]) => {
-      window._rankingDraft[g] = state.predictions[currentUser]?.[g]
-        ? [...state.predictions[currentUser][g]]
-        : [...teams];
-    });
-  }
+ // Always reset draft for current user
+  window._rankingDraft = {};
+  window._rankingDraftUser = currentUser;
+  Object.entries(groups).forEach(([g, teams]) => {
+    window._rankingDraft[g] = state.predictions[currentUser]?.[g]
+      ? [...state.predictions[currentUser][g]]
+      : [...teams];
+  });
 
   document.getElementById('rankings-subtext').textContent = isLocked
     ? '🔒 Your group rankings are locked in — good luck!'
