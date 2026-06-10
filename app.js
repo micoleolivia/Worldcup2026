@@ -861,10 +861,9 @@ function renderAIGroupRankings(containerId, aiName) {
     const swapWith = dir === 'up' ? idx - 1 : idx + 1;
     if (swapWith < 0 || swapWith >= arr.length) return;
     [arr[idx], arr[swapWith]] = [arr[swapWith], arr[idx]];
-    const oldCard = container.querySelector(`[data-ai-group-card="${aiName}-${g}"]`);
-    const newCard = buildCard(g);
-    grid.replaceChild(newCard, oldCard);
-  });
+    const oldCard = grid.querySelector(`[data-group-card="${g}"]`);
+      const newCard = buildGroupCard(g);
+      grid.replaceChild(newCard, oldCard);
 
   // Save button
   const saveBtn = document.createElement('button');
