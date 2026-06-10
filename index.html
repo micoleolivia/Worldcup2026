@@ -65,6 +65,7 @@
         <button id="nav-claude"      class="nav-btn hidden" onclick="showSection('claude-picks',event)">🤖 Picks</button>
         <button id="nav-chatgpt"     class="nav-btn hidden" onclick="showSection('chatgpt-picks',event)">🦾 Picks</button>
        <button id="nav-scores"      class="nav-btn hidden" onclick="showSection('scores',event)">Results</button>
+        <button id="nav-compare" class="nav-btn" onclick="showSection('compare',event)">Compare</button>
         <button id="nav-leaderboard" class="nav-btn" onclick="showSection('leaderboard',event)">Leaderboard</button>
         
       </nav>
@@ -171,7 +172,16 @@
       <div id="chatgpt-date-filter" class="group-filter"></div>
       <div id="chatgpt-scores-container"></div>
     </section>
-
+    
+<!-- COMPARE PREDICTIONS -->
+<section id="compare" class="section hidden">
+  <div class="section-header">
+    <h2>🔍 Compare Predictions</h2>
+    <p>See everyone's group stage rankings side by side</p>
+  </div>
+  <div id="compare-container"></div>
+</section>
+    
     <!-- LEADERBOARD -->
     <section id="leaderboard" class="section hidden">
       <div class="section-header">
