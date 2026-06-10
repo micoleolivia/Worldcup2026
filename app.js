@@ -249,6 +249,7 @@ function startLiveListener() {
       if (!document.getElementById('claude-picks').classList.contains('hidden')) renderClaudeScores();
       if (!document.getElementById('chatgpt-picks').classList.contains('hidden')) renderChatgptScores();
       if (!document.getElementById('match-predictions').classList.contains('hidden')) renderMatchPredictions();
+      if (!document.getElementById('compare').classList.contains('hidden')) renderCompare();
     }
   });
 }
@@ -513,6 +514,7 @@ document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
   renderActualScores();
   renderClaudeScores();
   renderChatgptScores();
+  renderCompare();
   renderLeaderboard();
   renderRules();
 
@@ -1555,6 +1557,80 @@ function allGroupMatchesDone() {
 //   1. Predictions (match +3/+1/0 & group rankings)
 //   2. Betting Pool (everyone starts at 50, goes up/down)
 // ============================================
+// ============================================
+// COMPARE PREDICTIONS — side by side view
+// ============================================
+function renderCompare() {
+  const container = document.getElementById('compare-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const allPlayers = [
+    { name:'Micole',  icon:'🐻', preds: state.predictions['Micole'],  isAI: false },
+    { name:'Mom',     icon:'🦒', preds: state.predictions['Mom'],     isAI: false },
+    { name:'Zac',     icon:'🦥', preds: state.predictions['Zac'],     isAI: false },
+    { name:'Claude',  icon:'🤖', preds: claudeGroupPredictions,       isAI: true  },
+    { name:'ChatGPT', icon:'🦾', preds: chatgptGroupPredictions,      isAI: true  },
+  ];
+
+  Object.entries(groups).forEach(([groupName, teams]) => {
+    // Group header
+    const groupHeader = document.createElement('div');
+    groupHeader.className = 'compare-group-header';
+    groupHeader.textContent = `Group ${groupName}`;
+    container.appendChild(groupHeader);
+
+    // Row of 5 cards
+    const row = document.createElement('div');
+    row.className = 'compare-row';
+
+    allPlayers.forEach(player => {
+      const card = document.createElement('div');
+      card.className = 'compare-card';
+
+      const isLocked = player.isAI
+        ? true
+        : state.lockedPredictions[player.name] === true;
+
+      const playerPreds = player.preds?.[groupName];
+
+      if (!isLocked || !playerPreds) {
+        card.innerHTML = `
+          <div class="compare-card-header">
+            <span class="compare-icon">${player.icon}</span>
+            <span class="compare-name">${player.name}</span>
+          </div>
+          <div class="compare-not-yet">Not submitted yet</div>
+        `;
+      } else {
+        const teamsHTML = playerPreds.map((team, i) => {
+          const rankClass = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : '';
+          return `
+            <div class="compare-team-row">
+              <div class="rank-badge ${rankClass}">${i+1}</div>
+              <span class="compare-flag">${teamFlags[team]||'🏳️'}</span>
+              <span class="compare-team">${team}</span>
+            </div>
+          `;
+        }).join('');
+
+        card.innerHTML = `
+          <div class="compare-card-header">
+            <span class="compare-icon">${player.icon}</span>
+            <span class="compare-name">${player.name}</span>
+          </div>
+          ${teamsHTML}
+        `;
+      }
+
+      row.appendChild(card);
+    });
+
+    container.appendChild(row);
+  });
+}
+window.renderCompare = renderCompare;
+
 function renderLeaderboard() {
   const container = document.getElementById('leaderboard-container');
   if (!container) return;
