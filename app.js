@@ -988,7 +988,6 @@ function renderGroups() {
   }
 
   Object.keys(groups).forEach(g => grid.appendChild(buildGroupCard(g)));
-  container.innerHTML = '';
   container.appendChild(grid);
 
   if (!isLocked) {
@@ -1002,9 +1001,9 @@ function renderGroups() {
       const swapWith = dir === 'up' ? idx - 1 : idx + 1;
       if (swapWith < 0 || swapWith >= arr.length) return;
       [arr[idx], arr[swapWith]] = [arr[swapWith], arr[idx]];
-      const oldCard = container.querySelector(`[data-group-card="${g}"]`);
+      const oldCard = grid.querySelector(`[data-group-card="${g}"]`);
       const newCard = buildGroupCard(g);
-      container.replaceChild(newCard, oldCard);
+      grid.replaceChild(newCard, oldCard);
     };
   } else {
     container.onclick = null;
