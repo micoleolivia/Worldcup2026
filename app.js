@@ -989,13 +989,11 @@ function renderGroups() {
   }
 
   Object.keys(groups).forEach(g => grid.appendChild(buildGroupCard(g)));
+  container.innerHTML = '';
   container.appendChild(grid);
 
   if (!isLocked) {
-    const newContainer = container.cloneNode(false);
-    container.parentNode.replaceChild(newContainer, container);
-    newContainer.appendChild(grid);
-    newContainer.addEventListener('click', e => {
+    container.onclick = e => {
       const btn = e.target.closest('.rank-arrow-btn');
       if (!btn || btn.disabled) return;
       const g        = btn.dataset.group;
@@ -1005,15 +1003,14 @@ function renderGroups() {
       const swapWith = dir === 'up' ? idx - 1 : idx + 1;
       if (swapWith < 0 || swapWith >= arr.length) return;
       [arr[idx], arr[swapWith]] = [arr[swapWith], arr[idx]];
-      const oldCard = newContainer.querySelector(`[data-group-card="${g}"]`);
+      const oldCard = container.querySelector(`[data-group-card="${g}"]`);
       const newCard = buildGroupCard(g);
-      newContainer.replaceChild(newCard, oldCard);
-    });
-    return;
+      container.replaceChild(newCard, oldCard);
+    };
+  } else {
+    container.onclick = null;
   }
-  container.appendChild(grid);
 }
-
 async function savePredictions() {
   if (!confirm('Lock your group rankings? This cannot be undone! 🔒')) return;
   if (!state.predictions[currentUser]) state.predictions[currentUser] = {};
