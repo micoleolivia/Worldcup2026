@@ -862,9 +862,9 @@ function renderAIGroupRankings(containerId, aiName) {
     if (swapWith < 0 || swapWith >= arr.length) return;
     [arr[idx], arr[swapWith]] = [arr[swapWith], arr[idx]];
     const oldCard = grid.querySelector(`[data-group-card="${g}"]`);
-      const newCard = buildGroupCard(g);
-      grid.replaceChild(newCard, oldCard);
-
+    const newCard = buildGroupCard(g);
+    grid.replaceChild(newCard, oldCard);
+  });
   // Save button
   const saveBtn = document.createElement('button');
   saveBtn.className = 'cta-btn';
