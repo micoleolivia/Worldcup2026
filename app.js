@@ -1082,7 +1082,7 @@ function renderMatchPredictions() {
     container.appendChild(dateHeader);
 
     // For daily bet check, always use currentUser (each person's bets are independent)
-    const dailyBetMatchId = getBetForDay(currentUser, dateKey);
+    const dailyBetMatchId = null; // betting now allowed on every match
 
     const grid = document.createElement('div');
     grid.className = 'matches-grid';
