@@ -1812,8 +1812,8 @@ function renderLeaderboard() {
   }));
   betScored.sort((a,b) => b.bettingPts - a.bettingPts);
 
-  const medals  = ['🥇','🥈','🥉','4️⃣','5️⃣'];
-  const classes = ['first','second','third','',''];
+  const medals  = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣'];
+  const classes = ['first','second','third','','','',''];
 
   // ── TABLE 1: Predictions ──
   const predTitle = document.createElement('div');
