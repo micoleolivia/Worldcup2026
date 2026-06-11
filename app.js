@@ -1117,7 +1117,7 @@ function renderMatchPredictions() {
             <span class="score-sep">–</span>
             <input type="number" min="0" max="20" id="pred-away-${match.id}" value="${saved.away??''}" placeholder="0"/>
           </div>
-          <button class="lock-btn" onclick="saveMatchPrediction('${match.id}')">Lock 🔒</button>
+          <button class="lock-btn" onclick="saveMatchPrediction('${match.id}')">Lock Score🔒</button>
         `;
       }
 
