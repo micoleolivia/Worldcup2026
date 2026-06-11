@@ -520,6 +520,7 @@ document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
   renderClaudeScores();
   renderChatgptScores();
   renderCompare();
+    renderScoreCompare();
   renderLeaderboard();
   renderRules();
 
