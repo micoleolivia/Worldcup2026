@@ -1580,11 +1580,13 @@ function renderScoreCompare() {
   const isAI    = currentUser === 'Claude' || currentUser === 'ChatGPT';
 
   const allPlayers = [
-    { name:'Micole',  icon:'🐻', isAI: false },
-    { name:'Mom',     icon:'🦒', isAI: false },
-    { name:'Zac',     icon:'🦥', isAI: false },
-    { name:'Claude',  icon:'🤖', isAI: true  },
-    { name:'ChatGPT', icon:'🦾', isAI: true  },
+    { name:'Micole',   icon:'🐻', isAI: false },
+    { name:'Mom',      icon:'🦒', isAI: false },
+    { name:'Zac',      icon:'🦥', isAI: false },
+    { name:'Sean',     icon:'🦅', isAI: false },
+    { name:'Patricia', icon:'🦩', isAI: false },
+    { name:'Claude',   icon:'🤖', isAI: true  },
+    { name:'ChatGPT',  icon:'🦾', isAI: true  },
   ];
 
   // Group matches by date
