@@ -366,7 +366,7 @@ async function resolveBetsForMatch(matchId, actualScore) {
         : (state.scorePredictions[player.name] || {})[matchId];
 
        if (pred && pred.home === actual.home && pred.away === actual.away) {
-        delta = bet.betAmount * EXACT_BET_WIN_MULTIPLIER + bet.betAmount;
+        delta = bet.betAmount * EXACT_BET_WIN_MULTIPLIER;
       } else {
         delta = -bet.betAmount;
       }
