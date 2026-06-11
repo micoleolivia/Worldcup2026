@@ -181,7 +181,7 @@ const BETTING_STARTING_POINTS = 50;  // every player starts with 50 betting poin
 const EXACT_BET_MAX           = 10;  // max bet for exact score bet
 const EXACT_BET_WIN_MULTIPLIER  = 10;   // win 3× the bet amount
 const EXACT_BET_LOSE_MULTIPLIER = 1;  // lose 3× the bet amount
-const WINNER_BET_STAKE        = 2;   // fixed stake for winner bet
+const WINNER_BET_STAKE        = 5;   // fixed stake for winner bet
 const WINNER_BET_WIN          = 5;   // gain if winner bet correct
 const WINNER_BET_LOSE         = 5;   // lose if winner bet wrong
 
@@ -362,7 +362,7 @@ async function resolveBetsForMatch(matchId, actualScore) {
         : (state.scorePredictions[player.name] || {})[matchId];
 
        if (pred && pred.home === actual.home && pred.away === actual.away) {
-        delta = bet.betAmount * EXACT_BET_WIN_MULTIPLIER;
+        delta = bet.betAmount * EXACT_BET_WIN_MULTIPLIER + bet.betAmount;
       } else {
         delta = -bet.betAmount;
       }
