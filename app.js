@@ -204,6 +204,7 @@ let state = {
   bets: {},
   // bettingPoints[username] = current betting pool total (starts at 50)
   bettingPoints: {},
+  rescuedPlayers: {},  // tracks who has already received their one-time rescue
 };
 
 let activeScoresFilter   = 'all';
@@ -380,8 +381,14 @@ async function resolveBetsForMatch(matchId, actualScore) {
     }
 
     // Points can never go below 0
+    // Points can never go below 0 — one-time secret 10pt rescue if they hit 0
     const newPoints = Math.max(0, currentPoints + delta);
-    state.bettingPoints[player.name] = newPoints;
+    if (newPoints === 0 && !state.rescuedPlayers[player.name]) {
+      state.bettingPoints[player.name] = 10;
+      state.rescuedPlayers[player.name] = true;
+    } else {
+      state.bettingPoints[player.name] = newPoints;
+    }
 
     // Mark bet as resolved and store the delta for display
     if (!state.bets[player.name]) state.bets[player.name] = {};
@@ -463,6 +470,7 @@ async function login(name) {
   // NEW: load betting data
   state.bets              = shared.bets               || {};
   state.bettingPoints     = shared.bettingPoints      || {};
+  state.rescuedPlayers    = shared.rescuedPlayers     || {};
 
   currentUser = name;
 
