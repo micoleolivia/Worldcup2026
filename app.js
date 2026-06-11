@@ -1206,21 +1206,21 @@ function buildBetDisplayHTML(bet, match, resultIn, username) {
   `;
 }
 
-// Build the interactive bet form HTML (radio buttons + amount input)
 function buildBetFormHTML(matchId, dateKey, username) {
   const currentPts = getBettingPoints(username);
   const maxExact   = Math.min(EXACT_BET_MAX, currentPts);
-
   return `
     <div class="bet-form" data-match-id="${matchId}" data-date-key="${dateKey}" data-username="${username}">
       <div class="bet-form-title">🎲 Place a bet? <span class="bet-balance">${currentPts} pts available</span></div>
       <div class="bet-options">
         <label class="bet-radio-label">
-          <input type="radio" name="bet-${matchId}" value="none" checked class="bet-radio"/>
+          <input type="radio" name="bet-${matchId}" value="none" checked class="bet-radio"
+            onchange="document.getElementById('exact-label-${matchId}').style.display='none';document.getElementById('bet-btn-${matchId}').style.display='none';"/>
           No Bet
         </label>
         <label class="bet-radio-label">
-          <input type="radio" name="bet-${matchId}" value="exact" class="bet-radio"/>
+          <input type="radio" name="bet-${matchId}" value="exact" class="bet-radio"
+            onchange="document.getElementById('exact-label-${matchId}').style.display='flex';document.getElementById('bet-btn-${matchId}').style.display='block';"/>
           Exact Score <span class="bet-note">(win 10× / lose your stake)</span>
         </label>
         <label class="bet-radio-label bet-exact-amount-label" id="exact-label-${matchId}" style="display:none">
@@ -1230,7 +1230,8 @@ function buildBetFormHTML(matchId, dateKey, username) {
           <span class="bet-note">pts (max ${maxExact})</span>
         </label>
         <label class="bet-radio-label">
-          <input type="radio" name="bet-${matchId}" value="winner" class="bet-radio"/>
+          <input type="radio" name="bet-${matchId}" value="winner" class="bet-radio"
+            onchange="document.getElementById('exact-label-${matchId}').style.display='none';document.getElementById('bet-btn-${matchId}').style.display='block';"/>
           Winner Bet <span class="bet-note">(${WINNER_BET_STAKE} pts · win +${WINNER_BET_WIN} / lose your stake)</span>
         </label>
       </div>
