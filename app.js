@@ -1703,11 +1703,13 @@ function renderCompare() {
   container.innerHTML = '';
 
   const allPlayers = [
-    { name:'Micole',  icon:'🐻', preds: state.predictions['Micole'],  isAI: false },
-    { name:'Mom',     icon:'🦒', preds: state.predictions['Mom'],     isAI: false },
-    { name:'Zac',     icon:'🦥', preds: state.predictions['Zac'],     isAI: false },
-    { name:'Claude',  icon:'🤖', preds: claudeGroupPredictions,       isAI: true  },
-    { name:'ChatGPT', icon:'🦾', preds: chatgptGroupPredictions,      isAI: true  },
+    { name:'Micole',   icon:'🐻', preds: state.predictions['Micole'],   isAI: false },
+    { name:'Mom',      icon:'🦒', preds: state.predictions['Mom'],      isAI: false },
+    { name:'Zac',      icon:'🦥', preds: state.predictions['Zac'],      isAI: false },
+    { name:'Sean',     icon:'🦅', preds: state.predictions['Sean'],     isAI: false },
+    { name:'Patricia', icon:'🦩', preds: state.predictions['Patricia'], isAI: false },
+    { name:'Claude',   icon:'🤖', preds: claudeGroupPredictions,        isAI: true  },
+    { name:'ChatGPT',  icon:'🦾', preds: chatgptGroupPredictions,       isAI: true  },
   ];
 
   Object.entries(groups).forEach(([groupName, teams]) => {
