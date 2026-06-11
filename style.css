@@ -218,6 +218,26 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 .bet-delta-lose{color:var(--lose);font-weight:600;}
 .bet-delta-neutral{color:var(--text3);}
 
+/* SCORE COMPARE */
+.sc-match-header{display:flex;align-items:center;justify-content:space-between;padding:10px 0 6px;margin-top:16px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:6px}
+.sc-match-teams{font-size:.85rem;font-weight:600;color:var(--text)}
+.sc-match-time{font-size:.72rem;color:var(--text2)}
+.sc-blocker{padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);font-size:.8rem;color:var(--text3);text-align:center;margin:6px 0 16px;font-style:italic}
+.sc-row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:8px 0 16px}
+.sc-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:10px;text-align:center}
+.sc-player-header{display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.sc-icon{font-size:.9rem}
+.sc-name{font-size:.7rem;font-weight:700;color:var(--text)}
+.sc-score{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:1px;color:var(--text)}
+.sc-exact{color:var(--gold)!important}
+.sc-winner{color:var(--teal)!important}
+.sc-wrong{color:var(--text3)!important}
+.sc-not-yet{font-size:.7rem;color:var(--text3);font-style:italic;padding:4px 0}
+.sc-bet{font-size:.65rem;color:var(--bet);margin-top:4px}
+.sc-bet-win{color:var(--win);font-weight:700}
+.sc-bet-lose{color:var(--lose);font-weight:700}
+@media(max-width:640px){.sc-row{grid-template-columns:repeat(3,1fr)}.sc-name{display:none}}
+
 /* COMPARE PREDICTIONS */
 .compare-group-header{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:2px;color:var(--gold);margin:28px 0 10px;padding-bottom:8px;border-bottom:1px solid var(--border)}
 .compare-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:8px}
