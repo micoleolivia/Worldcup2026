@@ -1691,7 +1691,7 @@ function renderLeaderboard() {
     row.innerHTML = `
       <div class="lb-position">${medals[i]}</div>
       <div class="lb-info">
-        <div class="lb-name">${player.icon} ${player.name}${state.rescuedPlayers[player.name] ? ' <span class="rescued-badge">rescued!</span>' : ''}</div>
+        <div class="lb-name">${player.icon} ${player.name}${state.rescuedPlayers[player.name] ? ' <span class="rescued-badge"> 🆘 rescued 🆘 </span>' : ''}</div>
         <div class="lb-type">${player.type}</div>
         ${hasResults
          ? `<div class="lb-breakdown">Match predictions: +${player.matchPts}pts</div>`
