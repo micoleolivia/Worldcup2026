@@ -2007,13 +2007,13 @@ async function resetEverything() {
     predictions:{}, lockedPredictions:{}, scorePredictions:{}, lockedScorePreds:{}, tournamentWinners:{}
   });
   await setDoc(doc(db,'worldcup2026','shared'), {
-    actualScores:{}, claudeScorePreds:{}, chatgptScorePreds:{}, finalStandings:{},
-    bets:{}, bettingPoints:{} // NEW: reset betting data
+   actualScores:{}, claudeScorePreds:{}, chatgptScorePreds:{}, finalStandings:{},
+    bets:{}, bettingPoints:{}, rescuedPlayers:{}
   });
   state = {
     predictions:{}, lockedPredictions:{}, scorePredictions:{}, lockedScorePreds:{},
     tournamentWinners:{}, actualScores:{}, claudeScorePreds:{}, chatgptScorePreds:{},
-    finalStandings:{}, bets:{}, bettingPoints:{}
+    finalStandings:{}, bets:{}, bettingPoints:{}, rescuedPlayers:{}
   };
   showLoading(false);
   showToast('🗑️ All data reset!','success');
