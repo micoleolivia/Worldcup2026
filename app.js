@@ -1719,11 +1719,17 @@ function renderCompare() {
     groupHeader.textContent = `Group ${groupName}`;
     container.appendChild(groupHeader);
 
-    // Row of 5 cards
-    const row = document.createElement('div');
-    row.className = 'compare-row';
+    // Two rows — humans on top, AIs below
+    const humans = allPlayers.filter(p => !p.isAI);
+    const ais    = allPlayers.filter(p => p.isAI);
 
-    allPlayers.forEach(player => {
+    const humanRow = document.createElement('div');
+    humanRow.className = 'compare-row';
+    const aiRow = document.createElement('div');
+    aiRow.className = 'compare-row compare-row-ai';
+
+    [...humans, ...ais].forEach((player, idx) => {
+      const row = idx < humans.length ? humanRow : aiRow;
       const card = document.createElement('div');
       card.className = 'compare-card';
 
