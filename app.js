@@ -251,6 +251,7 @@ function startLiveListener() {
       if (!document.getElementById('chatgpt-picks').classList.contains('hidden')) renderChatgptScores();
       if (!document.getElementById('match-predictions').classList.contains('hidden')) renderMatchPredictions();
       if (!document.getElementById('compare').classList.contains('hidden')) renderCompare();
+      if (!document.getElementById('score-compare').classList.contains('hidden')) renderScoreCompare();
     }
   });
 }
