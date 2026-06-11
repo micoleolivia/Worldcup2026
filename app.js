@@ -1781,13 +1781,15 @@ function renderLeaderboard() {
   const hasResults = Object.keys(state.actualScores).length > 0;
 
   const playerData = [
-    { name:'Micole',  icon:'🐻', type:'Human', groupPreds:state.predictions['Micole'], scorePreds:state.scorePredictions['Micole'] },
-    { name:'Mom',     icon:'🦒', type:'Human', groupPreds:state.predictions['Mom'],    scorePreds:state.scorePredictions['Mom'] },
-    { name:'Zac',     icon:'🦥', type:'Human', groupPreds:state.predictions['Zac'],    scorePreds:state.scorePredictions['Zac'] },
-    { name:'Claude',  icon:'🤖', type:'AI',    groupPreds:claudeGroupPredictions,      scorePreds:state.claudeScorePreds },
-    { name:'ChatGPT', icon:'🦾', type:'AI',    groupPreds:chatgptGroupPredictions,     scorePreds:state.chatgptScorePreds },
+    { name:'Micole',   icon:'🐻', type:'Human', groupPreds:state.predictions['Micole'],   scorePreds:state.scorePredictions['Micole'] },
+    { name:'Mom',      icon:'🦒', type:'Human', groupPreds:state.predictions['Mom'],      scorePreds:state.scorePredictions['Mom'] },
+    { name:'Zac',      icon:'🦥', type:'Human', groupPreds:state.predictions['Zac'],      scorePreds:state.scorePredictions['Zac'] },
+    { name:'Sean',     icon:'🦅', type:'Human', groupPreds:state.predictions['Sean'],     scorePreds:state.scorePredictions['Sean'] },
+    { name:'Patricia', icon:'🦩', type:'Human', groupPreds:state.predictions['Patricia'], scorePreds:state.scorePredictions['Patricia'] },
+    { name:'Claude',   icon:'🤖', type:'AI',    groupPreds:claudeGroupPredictions,        scorePreds:state.claudeScorePreds },
+    { name:'ChatGPT',  icon:'🦾', type:'AI',    groupPreds:chatgptGroupPredictions,       scorePreds:state.chatgptScorePreds },
   ];
-
+  
   // --- Compute prediction scores ---
   const predScored = playerData.map(player => {
     let matchPts = 0, groupPts = 0;
