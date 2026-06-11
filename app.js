@@ -402,7 +402,6 @@ async function resolveBetsForMatch(matchId, actualScore) {
       rescuedPlayers: state.rescuedPlayers,
     });
     updateHeaderPoints();
-  }
 }
 
 // Save a bet placed by the current user (or admin on behalf of AI)
