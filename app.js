@@ -1231,7 +1231,7 @@ function buildBetFormHTML(matchId, dateKey, username) {
         </label>
         <label class="bet-radio-label">
           <input type="radio" name="bet-${matchId}" value="winner" class="bet-radio"/>
-          Winner Bet <span class="bet-note">(${WINNER_BET_STAKE} pts · win +${WINNER_BET_WIN} / lose -${WINNER_BET_LOSE})</span>
+          Winner Bet <span class="bet-note">(${WINNER_BET_STAKE} pts · win +${WINNER_BET_WIN} / lose your stake)</span>
         </label>
       </div>
       <button class="bet-confirm-btn" id="bet-btn-${matchId}"
