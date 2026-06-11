@@ -167,11 +167,13 @@ const chatgptGroupPredictions = {
 // PLAYERS CONFIG
 // ============================================
 const PLAYERS = [
-  { name: 'Micole',  icon: '🐻', type: 'Human', isAI: false },
-  { name: 'Mom',     icon: '🦒', type: 'Human', isAI: false },
-  { name: 'Zac',     icon: '🦥', type: 'Human', isAI: false },
-  { name: 'Claude',  icon: '🤖', type: 'AI',    isAI: true  },
-  { name: 'ChatGPT', icon: '🦾', type: 'AI',    isAI: true  },
+  { name: 'Micole',   icon: '🐻', type: 'Human', isAI: false },
+  { name: 'Mom',      icon: '🦒', type: 'Human', isAI: false },
+  { name: 'Zac',      icon: '🦥', type: 'Human', isAI: false },
+  { name: 'Sean',     icon: '🦅', type: 'Human', isAI: false },
+  { name: 'Patricia', icon: '🦩', type: 'Human', isAI: false },
+  { name: 'Claude',   icon: '🤖', type: 'AI',    isAI: true  },
+  { name: 'ChatGPT',  icon: '🦾', type: 'AI',    isAI: true  },
 ];
 
 // ============================================
