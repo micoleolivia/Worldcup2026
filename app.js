@@ -1564,6 +1564,125 @@ function allGroupMatchesDone() {
 // ============================================
 // COMPARE PREDICTIONS — side by side view
 // ============================================
+// ============================================
+// SCORE COMPARE — see everyone's predictions
+// Only visible after YOU have locked your score
+// ============================================
+function renderScoreCompare() {
+  const container = document.getElementById('score-compare-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const isAI    = currentUser === 'Claude' || currentUser === 'ChatGPT';
+
+  const allPlayers = [
+    { name:'Micole',  icon:'🐻', isAI: false },
+    { name:'Mom',     icon:'🦒', isAI: false },
+    { name:'Zac',     icon:'🦥', isAI: false },
+    { name:'Claude',  icon:'🤖', isAI: true  },
+    { name:'ChatGPT', icon:'🦾', isAI: true  },
+  ];
+
+  // Group matches by date
+  const byDate = {};
+  matches.forEach(m => {
+    const { dateKey, display } = toSAST(m.utc);
+    if (!byDate[dateKey]) byDate[dateKey] = { display, matches: [] };
+    byDate[dateKey].matches.push(m);
+  });
+
+  Object.entries(byDate).forEach(([dateKey, { display, matches: dayMatches }]) => {
+    const dateHeader = document.createElement('div');
+    dateHeader.className = 'date-header';
+    dateHeader.textContent = display.split('·')[0].trim();
+    container.appendChild(dateHeader);
+
+    dayMatches.forEach(match => {
+      // Check if current user has locked their prediction for this match
+      const currentUserLocked = isAI
+        ? true
+        : state.lockedScorePreds[currentUser]?.[match.id] === true;
+
+      // Match header
+      const matchHeader = document.createElement('div');
+      matchHeader.className = 'sc-match-header';
+      matchHeader.innerHTML = `
+        <span class="sc-match-teams">${teamFlags[match.home]||''} ${match.home} vs ${match.away} ${teamFlags[match.away]||''}</span>
+        <span class="sc-match-time">🕐 ${toSAST(match.utc).time} SAST</span>
+      `;
+      container.appendChild(matchHeader);
+
+      // If current user hasn't locked yet — show blocker row
+      if (!currentUserLocked) {
+        const blocker = document.createElement('div');
+        blocker.className = 'sc-blocker';
+        blocker.innerHTML = `🔒 Lock your prediction first to see everyone's picks`;
+        container.appendChild(blocker);
+        return;
+      }
+
+      // Row of 5 player cards
+      const row = document.createElement('div');
+      row.className = 'sc-row';
+
+      allPlayers.forEach(player => {
+        const card = document.createElement('div');
+        card.className = 'sc-card';
+
+        // Get this player's prediction
+        const pred = player.isAI
+          ? (player.name === 'Claude' ? state.claudeScorePreds[match.id] : state.chatgptScorePreds[match.id])
+          : (state.scorePredictions[player.name] || {})[match.id];
+
+        const playerLocked = player.isAI
+          ? pred !== undefined
+          : state.lockedScorePreds[player.name]?.[match.id] === true;
+
+        // Get this player's bet for this match
+        const bet = getBetForMatch(player.name, match.id);
+
+        // Highlight if correct (result is in)
+        const actualScore = state.actualScores[match.id];
+        let scoreClass = '';
+        if (pred && actualScore) {
+          if (pred.home === actualScore.home && pred.away === actualScore.away) {
+            scoreClass = 'sc-exact';
+          } else {
+            const predResult = pred.home > pred.away ? 'H' : pred.home < pred.away ? 'A' : 'D';
+            const actResult  = actualScore.home > actualScore.away ? 'H' : actualScore.home < actualScore.away ? 'A' : 'D';
+            scoreClass = predResult === actResult ? 'sc-winner' : 'sc-wrong';
+          }
+        }
+
+        let betHTML = '';
+        if (bet) {
+          const betLabel = bet.betType === 'exact' ? `🎲 Exact ${bet.betAmount}pts` : `🎲 Winner 5pts`;
+          const betResult = bet.resolved
+            ? (bet.pointsDelta >= 0 ? `<span class="sc-bet-win">+${bet.pointsDelta}</span>` : `<span class="sc-bet-lose">${bet.pointsDelta}</span>`)
+            : '';
+          betHTML = `<div class="sc-bet">${betLabel} ${betResult}</div>`;
+        }
+
+        card.innerHTML = `
+          <div class="sc-player-header">
+            <span class="sc-icon">${player.icon}</span>
+            <span class="sc-name">${player.name}</span>
+          </div>
+          ${playerLocked && pred
+            ? `<div class="sc-score ${scoreClass}">${pred.home} – ${pred.away}</div>${betHTML}`
+            : `<div class="sc-not-yet">Not yet</div>`
+          }
+        `;
+
+        row.appendChild(card);
+      });
+
+      container.appendChild(row);
+    });
+  });
+}
+window.renderScoreCompare = renderScoreCompare;
+
 function renderCompare() {
   const container = document.getElementById('compare-container');
   if (!container) return;
