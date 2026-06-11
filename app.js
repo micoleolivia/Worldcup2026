@@ -1242,16 +1242,17 @@ function buildBetFormHTML(matchId, dateKey, username) {
   `;
 }
 
-// Attach change listeners to bet radio buttons after render
 function attachBetFormListeners() {
   document.querySelectorAll('.bet-form').forEach(form => {
     const matchId = form.dataset.matchId;
-    const radios  = form.querySelectorAll(`.bet-radio`);
+    const newForm = form.cloneNode(true);
+    form.parentNode.replaceChild(newForm, form);
+    const radios = newForm.querySelectorAll('.bet-radio');
     radios.forEach(radio => {
       radio.addEventListener('change', () => {
-        const val         = form.querySelector(`input[name="bet-${matchId}"]:checked`)?.value;
-        const exactLabel  = document.getElementById(`exact-label-${matchId}`);
-        const confirmBtn  = document.getElementById(`bet-btn-${matchId}`);
+        const val        = newForm.querySelector(`input[name="bet-${matchId}"]:checked`)?.value;
+        const exactLabel = document.getElementById(`exact-label-${matchId}`);
+        const confirmBtn = document.getElementById(`bet-btn-${matchId}`);
         if (exactLabel) exactLabel.style.display = val === 'exact' ? 'flex' : 'none';
         if (confirmBtn) confirmBtn.style.display  = val && val !== 'none' ? 'block' : 'none';
       });
