@@ -1628,10 +1628,17 @@ function renderScoreCompare() {
       }
 
       // Row of 5 player cards
-      const row = document.createElement('div');
-      row.className = 'sc-row';
+      // Two rows — humans on top, AIs below
+      const humans = allPlayers.filter(p => !p.isAI);
+      const ais    = allPlayers.filter(p => p.isAI);
 
-      allPlayers.forEach(player => {
+      const humanRow = document.createElement('div');
+      humanRow.className = 'sc-row';
+      const aiRow = document.createElement('div');
+      aiRow.className = 'sc-row sc-row-ai';
+
+      [...humans, ...ais].forEach((player, idx) => {
+        const row = idx < humans.length ? humanRow : aiRow;
         const card = document.createElement('div');
         card.className = 'sc-card';
 
@@ -1683,7 +1690,8 @@ function renderScoreCompare() {
         row.appendChild(card);
       });
 
-      container.appendChild(row);
+      container.appendChild(humanRow);
+      container.appendChild(aiRow);
     });
   });
 }
