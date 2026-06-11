@@ -396,10 +396,10 @@ async function resolveBetsForMatch(matchId, actualScore) {
     changed = true;
   });
 
-  if (changed) {
-    await saveToFirebase('shared', {
+  await saveToFirebase('shared', {
       bets: state.bets,
       bettingPoints: state.bettingPoints,
+      rescuedPlayers: state.rescuedPlayers,
     });
     updateHeaderPoints();
   }
