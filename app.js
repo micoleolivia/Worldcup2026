@@ -1285,12 +1285,7 @@ window.confirmBet = async function(matchId, dateKey, username) {
     }
   }
 
-  // Confirm they haven't already bet today (double-check)
-  const existing = getBetForDay(username, dateKey);
-  if (existing && existing !== matchId) {
-    showToast('You already placed a bet today!', 'error');
-    return;
-  }
+  
 
   const match = matches.find(m => m.id === matchId);
   const betLabel = betType === 'exact'
@@ -1425,7 +1420,7 @@ function renderAIPicks(containerId, predStore, saveKey, getFilter, btnLabel, btn
     container.appendChild(dateHeader);
 
     // NEW: check if this AI already has a bet today
-    const dailyBetMatchId = getBetForDay(aiName, dateKey);
+   const dailyBetMatchId = null; // betting now allowed on every match
 
     const grid = document.createElement('div');
     grid.className = 'matches-grid';
@@ -2100,7 +2095,7 @@ function renderRules() {
          <div class="rules-score-row"><span class="score-badge gold">Exact</span> Bet up to 10 points. Nail the exact score → Win 10× your bet. Get it wrong → lose your stake.</div>
         <div class="rules-score-row"><span class="score-badge silver">Winner</span> Fixed 5 point stake. Pick the right winner → Win 5 points. Get it wrong → lose your stake.</div>
       </div>
-      <p style="margin-top:10px"> Your betting points can never go below zero. One bet per day.</p>
+      <p style="margin-top:10px">Your betting points can never go below zero. You can bet on as many matches as you like!</p>
     </div>
     <div class="rules-block">
       <h3>The AI Competitors</h3>
