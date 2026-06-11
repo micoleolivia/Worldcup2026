@@ -243,6 +243,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 .lb-name{font-size:1rem;font-weight:700}
 .lb-type{font-size:.72rem;color:var(--text2);margin-top:1px}
 .lb-breakdown{font-size:.7rem;color:var(--text2);margin-top:3px}
+.rescued-badge{font-size:.6rem;font-weight:600;background:rgba(255,71,87,.15);color:var(--red);border:1px solid rgba(255,71,87,.3);padding:2px 6px;border-radius:100px;margin-left:4px;vertical-align:middle}
 .lb-points{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold);letter-spacing:1px}
 .lb-pts-label{font-size:.65rem;color:var(--text3);letter-spacing:1px;text-align:right}
 .leaderboard-empty{text-align:center;color:var(--text2);padding:50px 20px;font-size:.9rem;line-height:1.8}
