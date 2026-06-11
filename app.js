@@ -2092,7 +2092,7 @@ function renderRules() {
     </div>
     <div class="rules-block">
       <h3>Betting Pool</h3>
-      <p>Everyone starts with <strong>50 betting points</strong>. Once per day, you can put some of those points on the line for one match. Two ways to bet:</p>
+      <p>Everyone starts with <strong>50 betting points</strong>. Two ways to bet:</p>
       <div class="rules-scoring">
          <div class="rules-score-row"><span class="score-badge gold">Exact</span> Bet up to 10 points. Nail the exact score → Win 10× your bet. Get it wrong → lose your stake.</div>
         <div class="rules-score-row"><span class="score-badge silver">Winner</span> Fixed 5 point stake. Pick the right winner → Win 5 points. Get it wrong → lose your stake.</div>
