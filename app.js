@@ -1771,7 +1771,8 @@ function renderCompare() {
       row.appendChild(card);
     });
 
-    container.appendChild(row);
+    container.appendChild(humanRow);
+    container.appendChild(aiRow);
   });
 }
 window.renderCompare = renderCompare;
