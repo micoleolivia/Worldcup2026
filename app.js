@@ -486,8 +486,7 @@ document.getElementById('nav-claude').classList.toggle('hidden', !isAdmin);
 document.getElementById('nav-chatgpt').classList.toggle('hidden', !isAdmin);
   document.getElementById('nav-claude-winner').classList.toggle('hidden', !isAdmin);
 document.getElementById('nav-chatgpt-winner').classList.toggle('hidden', !isAdmin);
-document.getElementById('nav-claude-rankings').classList.toggle('hidden', !isAdmin);
-document.getElementById('nav-chatgpt-rankings').classList.toggle('hidden', !isAdmin);
+
 document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
 
   document.getElementById('nav-winner').classList.toggle('hidden', isAI);
@@ -515,8 +514,7 @@ document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
   renderGroups();
   renderAIWinnerPicker('claude-winner-container', 'Claude');
   renderAIWinnerPicker('chatgpt-winner-container', 'ChatGPT');
-  renderAIGroupRankings('claude-rankings-container', 'Claude');
-  renderAIGroupRankings('chatgpt-rankings-container', 'ChatGPT');
+  
   renderMatchPredictions();
   renderActualScores();
   renderClaudeScores();
