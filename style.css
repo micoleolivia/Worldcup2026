@@ -252,8 +252,7 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 .compare-flag{font-size:.85rem;flex-shrink:0}
 .compare-team{font-size:.72rem;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .compare-not-yet{font-size:.75rem;color:var(--text3);font-style:italic;text-align:center;padding:16px 0}
-@media(max-width:640px){.compare-row{grid-template-columns:repeat(2,1fr)}.compare-row .compare-card:last-child:nth-child(5){grid-column:1/-1}}
-
+@media(max-width:640px){.compare-row{grid-template-columns:repeat(3,1fr)}.sc-row{grid-template-columns:repeat(3,1fr)}.sc-name{display:none}}
 /* LEADERBOARD */
 #leaderboard-container{max-width:600px;margin:0 auto}
 .leaderboard-row{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius-lg);margin-bottom:8px;position:relative;overflow:hidden}
