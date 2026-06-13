@@ -1141,16 +1141,14 @@ function renderMatchPredictions() {
       } else if (existingBet) {
         // This user already has a bet on this match — show result/pending
         bettingHTML = buildBetDisplayHTML(existingBet, match, resultIn, currentUser);
-     } else if (dayBetElsewhere) {
-        bettingHTML = `<div class="bet-disabled">🎲 Daily winner bet already used — exact bets still available!</div>`;
-      } else if (resultIn) {
+    } else if (resultIn) {
         // Match is over, no bet was placed — betting window has passed
         bettingHTML = `<div class="bet-disabled">⏰ Betting window closed</div>`;
       } else {
         // All clear — show the bet form
-        bettingHTML = buildBetFormHTML(match.id, dateKey, currentUser);
+        bettingHTML = buildBetFormHTML(match.id, dateKey, currentUser, dailyWinnerBetMatchId !== null && dailyWinnerBetMatchId !== match.id);
       }
-
+      
       // Admin: also show betting input fields for AI players on AI admin pages
       // (handled in renderAIPicks for Claude/ChatGPT admin tabs)
 
