@@ -183,9 +183,9 @@ const BETTING_STARTING_POINTS = 50;  // every player starts with 50 betting poin
 const EXACT_BET_MAX           = 10;  // max bet for exact score bet
 const EXACT_BET_WIN_MULTIPLIER  = 10;   // win 3× the bet amount
 const EXACT_BET_LOSE_MULTIPLIER = 1;  // lose 3× the bet amount
-const WINNER_BET_STAKE        = 5;   // fixed stake for winner bet
+const WINNER_BET_STAKE        = 0;   // fixed stake for winner bet
 const WINNER_BET_WIN          = 5;   // gain if winner bet correct
-const WINNER_BET_LOSE         = 3;   // lose if winner bet wrong
+const WINNER_BET_LOSE         = 0;   // lose if winner bet wrong
 
 // ============================================
 // APP STATE
@@ -379,7 +379,7 @@ async function resolveBetsForMatch(matchId, actualScore) {
       if (pred) {
         const predResult = pred.home > pred.away ? 'H' : pred.home < pred.away ? 'A' : 'D';
         const actResult  = actual.home > actual.away ? 'H' : actual.home < actual.away ? 'A' : 'D';
-        delta = predResult === actResult ? WINNER_BET_WIN : -WINNER_BET_LOSE;
+        delta = predResult === actResult ? WINNER_BET_WIN : 0;
       }
     }
 
@@ -1081,8 +1081,11 @@ function renderMatchPredictions() {
     dateHeader.textContent = display.split('·')[0].trim();
     container.appendChild(dateHeader);
 
-    // For daily bet check, always use currentUser (each person's bets are independent)
-    const dailyBetMatchId = null; // betting now allowed on every match
+    // Winner bets limited to once per day — exact bets still unlimited
+    const userBets = state.bets[currentUser] || {};
+    const dailyWinnerBetMatchId = Object.entries(userBets).find(([id, bet]) => 
+      bet.betType === 'winner' && bet.dateKey === dateKey
+    )?.[0] || null;
 
     const grid = document.createElement('div');
     grid.className = 'matches-grid';
@@ -1096,8 +1099,8 @@ function renderMatchPredictions() {
 
       const existingBet     = getBetForMatch(currentUser, match.id);
       const resultIn        = state.actualScores[match.id] !== undefined;
-      // Has this user bet on a DIFFERENT match today?
-      const dayBetElsewhere = dailyBetMatchId && dailyBetMatchId !== match.id;
+      // Has this user already used their daily winner bet on a different match?
+      const dayBetElsewhere = dailyWinnerBetMatchId && dailyWinnerBetMatchId !== match.id;
 
       const card = document.createElement('div');
       card.className = 'match-card';
@@ -1138,9 +1141,8 @@ function renderMatchPredictions() {
       } else if (existingBet) {
         // This user already has a bet on this match — show result/pending
         bettingHTML = buildBetDisplayHTML(existingBet, match, resultIn, currentUser);
-      } else if (dayBetElsewhere) {
-        // Already used their daily bet on a different match
-        bettingHTML = `<div class="bet-disabled">🎲 Daily bet already used on another match today</div>`;
+     } else if (dayBetElsewhere) {
+        bettingHTML = `<div class="bet-disabled">🎲 Daily winner bet already used — exact bets still available!</div>`;
       } else if (resultIn) {
         // Match is over, no bet was placed — betting window has passed
         bettingHTML = `<div class="bet-disabled">⏰ Betting window closed</div>`;
@@ -1235,7 +1237,7 @@ function buildBetFormHTML(matchId, dateKey, username) {
         <label class="bet-radio-label">
           <input type="radio" name="bet-${matchId}" value="winner" class="bet-radio"
             onchange="document.getElementById('exact-label-${matchId}').style.display='none';document.getElementById('bet-btn-${matchId}').style.display='block';"/>
-          Winner Bet <span class="bet-note">(${WINNER_BET_STAKE} pts · win +${WINNER_BET_WIN} / lose your stake)</span>
+          Winner Bet <span class="bet-note">(free · win +${WINNER_BET_WIN} pts / lose nothing)</span>
         </label>
       </div>
       <button class="bet-confirm-btn" id="bet-btn-${matchId}"
@@ -1267,8 +1269,17 @@ window.confirmBet = async function(matchId, dateKey, username) {
   const betTypeEl = document.querySelector(`input[name="bet-${matchId}"]:checked`);
   if (!betTypeEl || betTypeEl.value === 'none') return;
 
-  const betType = betTypeEl.value; // 'exact' or 'winner'
-  let betAmount = 0;
+  // Winner bet is limited to once per day
+  if (betType === 'winner') {
+    const userBets = state.bets[username] || {};
+    const alreadyWinnerToday = Object.entries(userBets).some(([id, bet]) => 
+      bet.betType === 'winner' && bet.dateKey === dateKey && id !== matchId
+    );
+    if (alreadyWinnerToday) {
+      showToast('You can only place one winner bet per day!', 'error');
+      return;
+    }
+  }
 
   if (betType === 'exact') {
     const betForm = document.querySelector(`.bet-form[data-match-id="${matchId}"]`);
