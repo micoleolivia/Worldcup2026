@@ -2063,7 +2063,7 @@ function renderRules() {
   const container = document.getElementById('rules-container');
   if (!container) return;
   container.innerHTML = `
-    <div class="rules-block" style="border:2px solid var(--red);background:rgba(255,71,87,.12);animation:pulse 2s infinite">
+    <div class="rules-block" style="border:2px solid var(--red);background:rgba(255,71,87,.12);animation:pulse 2s infinite;text-align:center;max-width:600px;margin:0 auto 14px;">
       <h3 style="color:var(--red);font-size:1.6rem">🚨 RULE UPDATE! READ THIS FIRST 🚨</h3>
       <p style="color:var(--text);font-size:.95rem;font-weight:600">The winner bet has been updated mid-tournament to make it more balanced. Previously losing cost you your full stake which was the same risk as an exact bet but far less reward.</p>
       <p style="color:var(--text);margin-top:8px">From now on: <strong>fixed 5pt stake, win +5pts, lose only 3pts</strong>. This applies to all bets from <strong>Sunday 14 June at 18:00 SAST</strong> onwards. Any bets placed and resolved before then stand as they were.</p>
