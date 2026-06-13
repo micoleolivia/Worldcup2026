@@ -63,7 +63,7 @@ const matches = [
   { id:'B2', group:'B', home:'Qatar',                 away:'Switzerland',         utc:'2026-06-13T19:00Z', venue:"Levi's Stadium, Santa Clara" },
   { id:'C1', group:'C', home:'Brazil',                away:'Morocco',             utc:'2026-06-13T22:00Z', venue:'MetLife Stadium, East Rutherford' },
   { id:'C2', group:'C', home:'Haiti',                 away:'Scotland',            utc:'2026-06-14T01:00Z', venue:'Gillette Stadium, Foxborough' },
-  { id:'D2', group:'D', home:'Australia',             away:'Türkiye',             utc:'2026-06-14T16:00Z', venue:'BC Place, Vancouver' },
+  { id:'D2', group:'D', home:'Australia',             away:'Türkiye',             utc:'2026-06-14T04:00Z', venue:'BC Place, Vancouver' },
   { id:'E1', group:'E', home:'Germany',               away:'Curaçao',             utc:'2026-06-14T17:00Z', venue:'NRG Stadium, Houston' },
   { id:'F1', group:'F', home:'Netherlands',           away:'Japan',               utc:'2026-06-14T20:00Z', venue:"AT&T Stadium, Arlington" },
   { id:'E2', group:'E', home:'Ivory Coast',           away:'Ecuador',             utc:'2026-06-14T23:00Z', venue:'Lincoln Financial Field, Philadelphia' },
