@@ -1208,7 +1208,7 @@ function buildBetDisplayHTML(bet, match, resultIn, username) {
   `;
 }
 
-function buildBetFormHTML(matchId, dateKey, username) {
+function buildBetFormHTML(matchId, dateKey, username, winnerBetUsed = false) {
   const currentPts = getBettingPoints(username);
   const maxExact   = Math.min(EXACT_BET_MAX, currentPts);
   return `
@@ -1232,10 +1232,11 @@ function buildBetFormHTML(matchId, dateKey, username) {
   oninput="document.getElementById('bet-btn-${matchId}').dataset.betAmount=this.value;"/>
           <span class="bet-note">pts (max ${maxExact})</span>
         </label>
-        <label class="bet-radio-label">
+        <label class="bet-radio-label" ${winnerBetUsed ? 'style="opacity:.4;pointer-events:none"' : ''}>
           <input type="radio" name="bet-${matchId}" value="winner" class="bet-radio"
-            onchange="document.getElementById('exact-label-${matchId}').style.display='none';document.getElementById('bet-btn-${matchId}').style.display='block';"/>
-          Winner Bet <span class="bet-note">(free · win +${WINNER_BET_WIN} pts / lose nothing)</span>
+            onchange="document.getElementById('exact-label-${matchId}').style.display='none';document.getElementById('bet-btn-${matchId}').style.display='block';"
+            ${winnerBetUsed ? 'disabled' : ''}/>
+          Winner Bet <span class="bet-note">${winnerBetUsed ? '(daily winner bet already used)' : `(free · win +${WINNER_BET_WIN} pts / lose nothing)`}</span>
         </label>
       </div>
       <button class="bet-confirm-btn" id="bet-btn-${matchId}"
