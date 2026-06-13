@@ -2077,9 +2077,8 @@ function renderRules() {
     <div class="rules-block" style="border:2px solid var(--red);background:rgba(255,71,87,.12);animation:pulse 2s infinite;text-align:center;max-width:600px;margin:0 auto 14px;">
       <h3 style="color:var(--red);font-size:1.6rem">🚨 RULE UPDATE! READ THIS FIRST 🚨</h3>
       <p style="color:var(--text);font-size:.95rem;font-weight:600">The winner bet has been updated mid-tournament to make it more balanced. Previously losing cost you your full stake which was the same risk as an exact bet but far less reward.</p>
-     <p style="color:var(--text);margin-top:8px">From now on: <strong>fixed 5pt stake, win +5pts, lose only 3pts</strong>. This applies to all unresolved bets. Any bets already resolved stand as they were.</p>
-     <p style="color:var(--text);margin-top:8px">💬 If you noticed this flaw and switched to exact bets as a result, message me (Micole) and plead your case, I may award points if convinced!</p>
-    </div>
+     <p style="color:var(--text);margin-top:8px">The winner bet is now <strong>completely free</strong> — no stake, no risk! Pick one match per day where you're confident on the winner. Get it right → +3pts. Wrong → nothing lost. Exact bets are unchanged and can be placed on every match.</p>
+      <p style="color:var(--text);margin-top:8px">💬 If you placed winner bets under the old rules and want points adjusted, message Micole and plead your case! 😄</p>
     <div class="rules-block">
       <h3>Before the Tournament — Your To-Do List</h3>
       <p>Before the first match kicks off, make sure you've done all three of these:</p>
@@ -2116,7 +2115,7 @@ function renderRules() {
       <p>Everyone starts with <strong>50 betting points</strong>. Two ways to bet:</p>
       <div class="rules-scoring">
          <div class="rules-score-row"><span class="score-badge gold">Exact</span> Bet up to 10 points. Nail the exact score → Win 10× your bet. Get it wrong → lose your stake.</div>
-        <div class="rules-score-row"><span class="score-badge silver">Winner</span> Fixed 5 point stake. Pick the right winner → Win 5 points. Get it wrong → lose 3 points.</div>
+        <div class="rules-score-row"><span class="score-badge silver">Winner</span> Completely free — no stake! Pick one match per day. Get the winner right → +3 points. Wrong → nothing lost.</div>
       </div>
       <p style="margin-top:10px">Your betting points can never go below zero. You can bet on as many matches as you like!</p>
     </div>
