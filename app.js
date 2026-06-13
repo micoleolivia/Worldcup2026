@@ -185,7 +185,7 @@ const EXACT_BET_WIN_MULTIPLIER  = 10;   // win 3× the bet amount
 const EXACT_BET_LOSE_MULTIPLIER = 1;  // lose 3× the bet amount
 const WINNER_BET_STAKE        = 5;   // fixed stake for winner bet
 const WINNER_BET_WIN          = 5;   // gain if winner bet correct
-const WINNER_BET_LOSE         = 5;   // lose if winner bet wrong
+const WINNER_BET_LOSE         = 3;   // lose if winner bet wrong
 
 // ============================================
 // APP STATE
@@ -2058,6 +2058,13 @@ window.saveFinalStandings = saveFinalStandings;
 // ============================================
 // RULES PAGE
 // ============================================
+<div class="rules-block" style="border-color:var(--gold);background:rgba(245,197,24,.06)">
+      <h3>⚠️ Rule Update — Winner Bet Changed</h3>
+      <p>The winner bet has been updated mid-tournament to make it more balanced. Previously losing cost you your full stake — same risk as an exact bet but far less reward.</p>
+      <p>From now on: <strong>fixed 5pt stake, win +5pts, lose only 3pts</strong>. Any bets already resolved under the old rules stand as they were.</p>
+    </div>
+
+
 function renderRules() {
   const container = document.getElementById('rules-container');
   if (!container) return;
@@ -2098,7 +2105,7 @@ function renderRules() {
       <p>Everyone starts with <strong>50 betting points</strong>. Two ways to bet:</p>
       <div class="rules-scoring">
          <div class="rules-score-row"><span class="score-badge gold">Exact</span> Bet up to 10 points. Nail the exact score → Win 10× your bet. Get it wrong → lose your stake.</div>
-        <div class="rules-score-row"><span class="score-badge silver">Winner</span> Fixed 5 point stake. Pick the right winner → Win 5 points. Get it wrong → lose your stake.</div>
+        <div class="rules-score-row"><span class="score-badge silver">Winner</span> Fixed 5 point stake. Pick the right winner → Win 5 points. Get it wrong → lose 3 points.</div>
       </div>
       <p style="margin-top:10px">Your betting points can never go below zero. You can bet on as many matches as you like!</p>
     </div>
