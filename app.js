@@ -1222,13 +1222,14 @@ function buildBetFormHTML(matchId, dateKey, username) {
         </label>
         <label class="bet-radio-label">
           <input type="radio" name="bet-${matchId}" value="exact" class="bet-radio"
-            onchange="document.getElementById('exact-label-${matchId}').style.display='flex';document.getElementById('bet-btn-${matchId}').style.display='block';"/>
+            onchange="document.getElementById('exact-label-${matchId}').style.display='flex';document.getElementById('bet-btn-${matchId}').style.display='block';document.getElementById('bet-btn-${matchId}').dataset.betType='exact';"/>
           Exact Score <span class="bet-note">(win 10× / lose your stake)</span>
         </label>
         <label class="bet-radio-label bet-exact-amount-label" id="exact-label-${matchId}" style="display:none">
           Bet amount:
           <input type="number" min="1" max="${maxExact}" value="1"
-            id="bet-amount-${matchId}" class="bet-amount-input" placeholder="1–${maxExact}"/>
+  id="bet-amount-${matchId}" class="bet-amount-input" placeholder="1–${maxExact}"
+  oninput="document.getElementById('bet-btn-${matchId}').dataset.betAmount=this.value;"/>
           <span class="bet-note">pts (max ${maxExact})</span>
         </label>
         <label class="bet-radio-label">
