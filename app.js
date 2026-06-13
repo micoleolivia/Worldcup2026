@@ -1262,11 +1262,13 @@ function attachBetFormListeners() {
   });
 }
 
-// Called when user clicks "Lock Bet" on a match card
 window.confirmBet = async function(matchId, dateKey, username) {
-  const betTypeEl = document.querySelector(`input[name="bet-${matchId}"]:checked`);
+  const betForm   = document.querySelector(`.bet-form[data-match-id="${matchId}"]`);
+  const betTypeEl = betForm 
+    ? betForm.querySelector(`input[name="bet-${matchId}"]:checked`) 
+    : document.querySelector(`input[name="bet-${matchId}"]:checked`);
   if (!betTypeEl || betTypeEl.value === 'none') return;
-
+  const betType = betTypeEl.value;
   // Winner bet is limited to once per day
   if (betType === 'winner') {
     const userBets = state.bets[username] || {};
