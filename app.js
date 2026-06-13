@@ -2064,8 +2064,8 @@ function renderRules() {
   if (!container) return;
   container.innerHTML = `
     <div class="rules-block" style="border:2px solid var(--red);background:rgba(255,71,87,.12);animation:pulse 2s infinite">
-      <h3 style="color:var(--red);font-size:1.6rem">🚨 RULE UPDATE — READ THIS FIRST 🚨</h3>
-      <p style="color:var(--text);font-size:.95rem;font-weight:600">The winner bet has been updated mid-tournament to make it more balanced. Previously losing cost you your full stake — same risk as an exact bet but far less reward.</p>
+      <h3 style="color:var(--red);font-size:1.6rem">🚨 RULE UPDATE! READ THIS FIRST 🚨</h3>
+      <p style="color:var(--text);font-size:.95rem;font-weight:600">The winner bet has been updated mid-tournament to make it more balanced. Previously losing cost you your full stake which was the same risk as an exact bet but far less reward.</p>
       <p style="color:var(--text);margin-top:8px">From now on: <strong>fixed 5pt stake, win +5pts, lose only 3pts</strong>. Any bets already resolved under the old rules stand as they were.</p>
     </div>
     <div class="rules-block">
