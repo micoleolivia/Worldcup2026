@@ -1433,57 +1433,26 @@ function renderAIPicks(containerId, predStore, saveKey, getFilter, btnLabel, btn
     dateHeader.textContent = display.split('·')[0].trim();
     container.appendChild(dateHeader);
 
-    // NEW: check if this AI already has a bet today
-   const dailyBetMatchId = null; // betting now allowed on every match
-
+    const aiUserBets = state.bets[aiName] || {};
+    const aiDailyWinnerBet = Object.entries(aiUserBets).find(([id, bet]) =>
+      bet.betType === 'winner' && bet.dateKey === dateKey
+    )?.[0] || null;
     const grid = document.createElement('div');
     grid.className = 'matches-grid';
-
     dayMatches.forEach(match => {
-      const sast       = toSAST(match.utc);
-      const saved      = predStore[match.id] || {};
+      const sast        = toSAST(match.utc);
+      const saved       = predStore[match.id] || {};
       const existingBet = getBetForMatch(aiName, match.id);
-      const resultIn   = state.actualScores[match.id] !== undefined;
-      const dayBetElsewhere = dailyBetMatchId && dailyBetMatchId !== match.id;
-
+      const resultIn    = state.actualScores[match.id] !== undefined;
       const card = document.createElement('div');
       card.className = 'match-card';
-
-      // NEW: bet UI for AI on admin tabs
+      // Bet UI for AI on admin tabs
       let aiBetHTML = '';
       if (existingBet) {
         aiBetHTML = buildBetDisplayHTML(existingBet, match, resultIn, aiName);
-      } else if (!resultIn && !dayBetElsewhere) {
-        aiBetHTML = buildBetFormHTML(match.id, dateKey, aiName);
-      } else if (dayBetElsewhere) {
-        aiBetHTML = `<div class="bet-disabled">🎲 Daily bet used on another match</div>`;
+      } else if (!resultIn) {
+        aiBetHTML = buildBetFormHTML(match.id, dateKey, aiName, aiDailyWinnerBet !== null && aiDailyWinnerBet !== match.id);
       }
-
-      card.innerHTML = `
-        <div class="match-meta">
-          <span class="match-group-tag">Group ${match.group}</span>
-          <span class="match-time">🕐 ${sast.time} SAST</span>
-        </div>
-        <div class="match-teams">
-          <div class="match-team">${teamFlags[match.home]||''} ${match.home}</div>
-          <div class="match-vs">VS</div>
-          <div class="match-team">${match.away} ${teamFlags[match.away]||''}</div>
-        </div>
-        <div class="match-venue">📍 ${match.venue}</div>
-        <div class="score-inputs">
-          <input type="number" min="0" max="20" id="${saveKey}-home-${match.id}" value="${saved.home??''}" placeholder="0"/>
-          <span class="score-sep">–</span>
-          <input type="number" min="0" max="20" id="${saveKey}-away-${match.id}" value="${saved.away??''}" placeholder="0"/>
-        </div>
-        <button class="save-result-btn ${btnClass}" onclick="saveAIScore('${match.id}','${saveKey}')">Save ${btnLabel}</button>
-        ${saved.home!==undefined ? `<div class="match-result-display">${btnLabel}: ${match.home} ${saved.home} – ${saved.away} ${match.away}</div>` : ''}
-        ${aiBetHTML}
-      `;
-      grid.appendChild(card);
-    });
-    container.appendChild(grid);
-  });
-
   // Attach bet form listeners after rendering
   attachBetFormListeners();
 }
