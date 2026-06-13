@@ -1264,7 +1264,8 @@ function attachBetFormListeners() {
 }
 
 window.confirmBet = async function(matchId, dateKey, username) {
-  const betForm   = document.querySelector(`.bet-form[data-match-id="${matchId}"]`);
+  const betForm   = [...document.querySelectorAll(`.bet-form[data-match-id="${matchId}"]`)]
+    .find(f => f.offsetParent !== null); // finds the visible one
   const betTypeEl = betForm 
     ? betForm.querySelector(`input[name="bet-${matchId}"]:checked`) 
     : document.querySelector(`input[name="bet-${matchId}"]:checked`);
