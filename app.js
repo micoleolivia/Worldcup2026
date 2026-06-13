@@ -1451,7 +1451,8 @@ function renderAIPicks(containerId, predStore, saveKey, getFilter, btnLabel, btn
       if (existingBet) {
         aiBetHTML = buildBetDisplayHTML(existingBet, match, resultIn, aiName);
       } else if (!resultIn) {
-        aiBetHTML = buildBetFormHTML(match.id, dateKey, aiName, aiDailyWinnerBet !== null && aiDailyWinnerBet !== match.id);
+        const winnerUsed = aiDailyWinnerBet !== null && aiDailyWinnerBet !== match.id;
+        aiBetHTML = buildBetFormHTML(match.id, dateKey, aiName, winnerUsed);
       }
   // Attach bet form listeners after rendering
   attachBetFormListeners();
