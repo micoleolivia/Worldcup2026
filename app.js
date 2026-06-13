@@ -2078,7 +2078,7 @@ function renderRules() {
       <h3 style="color:var(--red);font-size:1.6rem">🚨 RULE UPDATE! READ THIS FIRST 🚨</h3>
       <p style="color:var(--text);font-size:.95rem;font-weight:600">The winner bet has been updated mid-tournament to make it more balanced. Previously losing cost you your full stake which was the same risk as an exact bet but far less reward.</p>
      <p style="color:var(--text);margin-top:8px">The winner bet is now <strong>completely free</strong> — no stake, no risk! Pick ONE(!) match per day where you're confident on the winner. Get it right → +3pts. Wrong → nothing lost. Exact bets are unchanged and can be placed on every match.</p>
-      
+      </div>
     <div class="rules-block">
       <h3>Before the Tournament — Your To-Do List</h3>
       <p>Before the first match kicks off, make sure you've done all three of these:</p>
