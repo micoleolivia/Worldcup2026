@@ -1272,7 +1272,8 @@ window.confirmBet = async function(matchId, dateKey, username) {
 
   if (betType === 'exact') {
     const betForm = document.querySelector(`.bet-form[data-match-id="${matchId}"]`);
-    betAmount = parseInt(betForm?.querySelector(`#bet-amount-${matchId}`)?.value);
+    const btn = document.getElementById(`bet-btn-${matchId}`);
+    betAmount = parseInt(btn?.dataset?.betAmount || document.getElementById(`bet-amount-${matchId}`)?.value);
     const maxExact = Math.min(EXACT_BET_MAX, getBettingPoints(username));
     if (isNaN(betAmount) || betAmount < 1 || betAmount > maxExact) {
       showToast(`Enter a bet between 1 and ${maxExact} pts`, 'error');
