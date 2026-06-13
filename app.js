@@ -2067,6 +2067,7 @@ function renderRules() {
       <h3 style="color:var(--red);font-size:1.6rem">🚨 RULE UPDATE! READ THIS FIRST 🚨</h3>
       <p style="color:var(--text);font-size:.95rem;font-weight:600">The winner bet has been updated mid-tournament to make it more balanced. Previously losing cost you your full stake which was the same risk as an exact bet but far less reward.</p>
      <p style="color:var(--text);margin-top:8px">From now on: <strong>fixed 5pt stake, win +5pts, lose only 3pts</strong>. This applies to all unresolved bets. Any bets already resolved stand as they were.</p>
+     <p style="color:var(--text);margin-top:8px">💬 If you noticed this flaw and switched to exact bets as a result, message me (Micole) and plead your case, I may award points if convinced!</p>
     </div>
     <div class="rules-block">
       <h3>Before the Tournament — Your To-Do List</h3>
