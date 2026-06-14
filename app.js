@@ -1446,9 +1446,9 @@ function renderAIPicks(containerId, predStore, saveKey, getFilter, btnLabel, btn
     container.appendChild(dateHeader);
 
     const aiUserBets = state.bets[aiName] || {};
-    const aiDailyWinnerBet = Object.entries(aiUserBets).find(([id, bet]) =>
+    const aiDailyWinnerBets = Object.entries(aiUserBets).filter(([id, bet]) =>
   bet.betType === 'winner' && bet.dateKey === dateKey
-)?.[0] || null;
+);
     const grid = document.createElement('div');
     grid.className = 'matches-grid';
     dayMatches.forEach(match => {
@@ -1463,7 +1463,8 @@ function renderAIPicks(containerId, predStore, saveKey, getFilter, btnLabel, btn
       if (existingBet) {
         aiBetHTML = buildBetDisplayHTML(existingBet, match, resultIn, aiName);
       } else if (!resultIn) {
-        const winnerUsed = aiDailyWinnerBet !== null && aiDailyWinnerBet !== match.id;
+        const alreadyBetThisMatch = aiDailyWinnerBets.some(([id]) => id === match.id);
+const winnerUsed = !alreadyBetThisMatch && aiDailyWinnerBets.length >= 2;
         aiBetHTML = buildBetFormHTML(match.id, dateKey, aiName, winnerUsed);
       }
       card.innerHTML = `
