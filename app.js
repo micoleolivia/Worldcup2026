@@ -348,11 +348,6 @@ function getBetForMatch(username, matchId) {
   return (state.bets[username] || {})[matchId] || null;
 }
 
-function getTodaySAST() {
-  const d = new Date();
-  d.setHours(d.getHours() + 2);
-  return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
-}
 
 // Resolve bets for a given match when the actual score is entered.
 // Called by saveActualScore. Updates bettingPoints and marks bets resolved.
@@ -1447,8 +1442,8 @@ function renderAIPicks(containerId, predStore, saveKey, getFilter, btnLabel, btn
 
     const aiUserBets = state.bets[aiName] || {};
     const aiDailyWinnerBet = Object.entries(aiUserBets).find(([id, bet]) =>
-      bet.betType === 'winner' && bet.placedDate dateKey && id !== matchId
-    )?.[0] || null;
+  bet.betType === 'winner' && bet.dateKey === dateKey
+)?.[0] || null;
     const grid = document.createElement('div');
     grid.className = 'matches-grid';
     dayMatches.forEach(match => {
