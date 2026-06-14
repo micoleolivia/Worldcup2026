@@ -348,6 +348,12 @@ function getBetForMatch(username, matchId) {
   return (state.bets[username] || {})[matchId] || null;
 }
 
+function getTodaySAST() {
+  const d = new Date();
+  d.setHours(d.getHours() + 2);
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
+}
+
 // Resolve bets for a given match when the actual score is entered.
 // Called by saveActualScore. Updates bettingPoints and marks bets resolved.
 async function resolveBetsForMatch(matchId, actualScore) {
@@ -418,10 +424,11 @@ async function saveBet(matchId, betType, betAmount, dateKey, forUser = null) {
     betType,
     betAmount: betType === 'winner' ? WINNER_BET_STAKE : betAmount,
     dateKey,
+    placedDate: getTodaySAST(),
     resolved: false,
     pointsDelta: null,
   };
-
+  
   await saveToFirebase('shared', { bets: state.bets });
   showToast(`Bet locked in! 🎲`, 'success');
   renderMatchPredictions();
@@ -1279,7 +1286,7 @@ window.confirmBet = async function(matchId, dateKey, username) {
   if (betType === 'winner') {
     const userBets = state.bets[username] || {};
     const alreadyWinnerToday = Object.entries(userBets).some(([id, bet]) => 
-      bet.betType === 'winner' && bet.dateKey === dateKey && id !== matchId
+      bet.betType === 'winner' && bet.placedDate === getTodaySAST() && id !== matchId
     );
     if (alreadyWinnerToday) {
       showToast('You can only place one winner bet per day!', 'error');
@@ -1441,7 +1448,7 @@ function renderAIPicks(containerId, predStore, saveKey, getFilter, btnLabel, btn
 
     const aiUserBets = state.bets[aiName] || {};
     const aiDailyWinnerBet = Object.entries(aiUserBets).find(([id, bet]) =>
-      bet.betType === 'winner' && bet.dateKey === dateKey
+      bet.betType === 'winner' && bet.placedDate === getTodaySAST()
     )?.[0] || null;
     const grid = document.createElement('div');
     grid.className = 'matches-grid';
