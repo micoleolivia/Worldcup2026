@@ -1280,7 +1280,7 @@ window.confirmBet = async function(matchId, dateKey, username) {
   if (betType === 'winner') {
     const userBets = state.bets[username] || {};
     const alreadyWinnerToday = Object.entries(userBets).some(([id, bet]) => 
-      bet.betType === 'winner' && bet.dateKey === dateKey && id !== matchId
+      bet.betType === 'winner' && bet.dateKey === dateKey
     );
     if (alreadyWinnerToday) {
       showToast('You can only place one winner bet per day!', 'error');
