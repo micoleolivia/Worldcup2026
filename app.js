@@ -424,7 +424,6 @@ async function saveBet(matchId, betType, betAmount, dateKey, forUser = null) {
     betType,
     betAmount: betType === 'winner' ? WINNER_BET_STAKE : betAmount,
     dateKey,
-    placedDate: getTodaySAST(),
     resolved: false,
     pointsDelta: null,
   };
@@ -1286,7 +1285,7 @@ window.confirmBet = async function(matchId, dateKey, username) {
   if (betType === 'winner') {
     const userBets = state.bets[username] || {};
     const alreadyWinnerToday = Object.entries(userBets).some(([id, bet]) => 
-      bet.betType === 'winner' && bet.placedDate === getTodaySAST() && id !== matchId
+      bet.betType === 'winner' && bet.dateKey === dateKey && id !== matchId
     );
     if (alreadyWinnerToday) {
       showToast('You can only place one winner bet per day!', 'error');
@@ -1448,7 +1447,7 @@ function renderAIPicks(containerId, predStore, saveKey, getFilter, btnLabel, btn
 
     const aiUserBets = state.bets[aiName] || {};
     const aiDailyWinnerBet = Object.entries(aiUserBets).find(([id, bet]) =>
-      bet.betType === 'winner' && bet.placedDate === getTodaySAST()
+      bet.betType === 'winner' && bet.placedDate dateKey && id !== matchId
     )?.[0] || null;
     const grid = document.createElement('div');
     grid.className = 'matches-grid';
