@@ -1086,11 +1086,13 @@ function renderMatchPredictions() {
     dateHeader.textContent = display.split('·')[0].trim();
     container.appendChild(dateHeader);
 
-    // Winner bets limited to once per day — exact bets still unlimited
+    // Winner bets limited to twice per day — exact bets still unlimited
     const userBets = state.bets[currentUser] || {};
-    const dailyWinnerBetMatchId = Object.entries(userBets).find(([id, bet]) => 
+    const dailyWinnerBets = Object.entries(userBets).filter(([id, bet]) =>
       bet.betType === 'winner' && bet.dateKey === dateKey
-    )?.[0] || null;
+    );
+    const dailyWinnerBetMatchId = dailyWinnerBets.length >= 2 ? 'maxed' : 
+      dailyWinnerBets[0]?.[0] || null;
 
     const grid = document.createElement('div');
     grid.className = 'matches-grid';
@@ -1105,7 +1107,8 @@ function renderMatchPredictions() {
       const existingBet     = getBetForMatch(currentUser, match.id);
       const resultIn        = state.actualScores[match.id] !== undefined;
       // Has this user already used their daily winner bet on a different match?
-      const dayBetElsewhere = dailyWinnerBetMatchId && dailyWinnerBetMatchId !== match.id;
+      const alreadyBetThisMatch = dailyWinnerBets.some(([id]) => id === match.id);
+      const dayBetElsewhere = !alreadyBetThisMatch && dailyWinnerBets.length >= 2;
 
       const card = document.createElement('div');
       card.className = 'match-card';
@@ -1279,15 +1282,17 @@ window.confirmBet = async function(matchId, dateKey, username) {
   // Winner bet is limited to once per day
   if (betType === 'winner') {
     const userBets = state.bets[username] || {};
-    const alreadyWinnerToday = Object.entries(userBets).some(([id, bet]) => 
-      bet.betType === 'winner' && bet.dateKey === dateKey
+    const winnerBetsToday = Object.entries(userBets).filter(([id, bet]) => 
+      bet.betType === 'winner' && bet.dateKey === dateKey && id !== matchId
     );
-    if (alreadyWinnerToday) {
-      showToast('You can only place one winner bet per day!', 'error');
+    if (winnerBetsToday.length >= 2) {
+      showToast("You've used both winner bets for this date!", 'error');
       return;
     }
+    if (winnerBetsToday.length === 1) {
+      if (!confirm("⚠️ This is your LAST winner bet for this date! You won't be able to place any more. Are you sure?")) return;
+    }
   }
-
   let betAmount = 0;
   if (betType === 'exact') {
     const btn = document.getElementById(`bet-btn-${matchId}`);
