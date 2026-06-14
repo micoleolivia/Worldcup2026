@@ -186,6 +186,7 @@ const EXACT_BET_LOSE_MULTIPLIER = 1;  // lose 3× the bet amount
 const WINNER_BET_STAKE        = 0;   // fixed stake for winner bet
 const WINNER_BET_WIN          = 5;   // gain if winner bet correct
 const WINNER_BET_LOSE         = 0;   // lose if winner bet wrong
+const WEEKLY_TOPUP            = 10;  // pts added to everyone every Monday
 
 // ============================================
 // APP STATE
@@ -207,6 +208,7 @@ let state = {
   // bettingPoints[username] = current betting pool total (starts at 50)
   bettingPoints: {},
   rescuedPlayers: {},  // tracks who has already received their one-time rescue
+  lastTopupDate: null, // tracks the last date a weekly top-up was applied
 };
 
 let activeScoresFilter   = 'all';
@@ -473,6 +475,7 @@ async function login(name) {
   state.bets              = shared.bets               || {};
   state.bettingPoints     = shared.bettingPoints      || {};
   state.rescuedPlayers    = shared.rescuedPlayers     || {};
+  state.lastTopupDate     = shared.lastTopupDate      || null;
 
   currentUser = name;
 
@@ -490,7 +493,8 @@ document.getElementById('nav-chatgpt').classList.toggle('hidden', !isAdmin);
   document.getElementById('nav-claude-winner').classList.toggle('hidden', !isAdmin);
 document.getElementById('nav-chatgpt-winner').classList.toggle('hidden', !isAdmin);
 
-document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
+  document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
+  document.getElementById('topup-btn').classList.toggle('hidden', !isAdmin);
 
   document.getElementById('nav-winner').classList.toggle('hidden', isAI);
   document.getElementById('nav-rankings').classList.toggle('hidden', false); // visible for everyone
@@ -2181,3 +2185,32 @@ async function resetEverything() {
   updateHeaderPoints();
 }
 window.resetEverything = resetEverything;
+
+
+// Add at the very bottom of app.js:
+async function applyWeeklyTopup() {
+  if (!confirm('Apply weekly +10pt top-up to all players?')) return;
+
+  const today = new Date().toISOString().split('T')[0];
+
+  if (state.lastTopupDate === today) {
+    showToast('Top-up already applied today!', 'error');
+    return;
+  }
+
+  PLAYERS.forEach(player => {
+    state.bettingPoints[player.name] = (state.bettingPoints[player.name] ?? BETTING_STARTING_POINTS) + WEEKLY_TOPUP;
+  });
+
+  state.lastTopupDate = today;
+
+  await saveToFirebase('shared', {
+    bettingPoints: state.bettingPoints,
+    lastTopupDate: state.lastTopupDate,
+  });
+
+  showToast('Weekly +10pt top-up applied to everyone! 🎲', 'success');
+  renderLeaderboard();
+  updateHeaderPoints();
+}
+window.applyWeeklyTopup = applyWeeklyTopup;
