@@ -211,11 +211,12 @@ let state = {
   lastTopupDate: null, // tracks the last date a weekly top-up was applied
 };
 
-let activeScoresFilter   = 'all';
-let activeClaudeFilter   = 'all';
-let activeChatgptFilter  = 'all';
-let activeDateFilter     = 'all';
-let activeResultsDate    = 'all';
+let activeScoresFilter      = 'all';
+let activeClaudeFilter      = 'all';
+let activeChatgptFilter     = 'all';
+let activeDateFilter        = 'all';
+let activeResultsDate       = 'all';
+let activeScoreCompareFilter = 'all';
 let unsubscribe = null;
 
 // ============================================
@@ -516,6 +517,10 @@ document.getElementById('nav-chatgpt-winner').classList.toggle('hidden', !isAdmi
   buildDateFilter('chatgpt-date-filter', activeChatgptFilter, (key) => {
     activeChatgptFilter = key;
     renderChatgptScores();
+  });
+  buildDateFilter('score-compare-date-filter', activeScoreCompareFilter, (key) => {
+    activeScoreCompareFilter = key;
+    renderScoreCompare();
   });
 
   renderWinnerPicker();
@@ -1617,8 +1622,12 @@ function renderScoreCompare() {
 
   // Group matches by date
   const byDate = {};
-  matches.forEach(m => {
-    const { dateKey, display } = toSAST(m.utc);
+  const filteredMatches = activeScoreCompareFilter === 'all'
+  ? matches
+  : matches.filter(m => toSAST(m.utc).dateKey === activeScoreCompareFilter);
+
+filteredMatches.forEach(m => {
+  const { dateKey, display } = toSAST(m.utc);
     if (!byDate[dateKey]) byDate[dateKey] = { display, matches: [] };
     byDate[dateKey].matches.push(m);
   });
