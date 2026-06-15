@@ -909,17 +909,6 @@ function renderGroups() {
   const container = document.getElementById('groups-container');
   if (!container) return;
   container.innerHTML = '';
-
-  // RULE UPDATE BANNER
-  const ruleBanner = document.createElement('div');
-  ruleBanner.style.cssText = 'border:2px solid var(--red);background:rgba(255,71,87,.12);animation:pulse 2s infinite;text-align:center;max-width:600px;margin:0 auto 20px;padding:18px 24px;border-radius:var(--radius-lg);position:relative;z-index:1';
-  ruleBanner.innerHTML = `
-    <h3 style="color:var(--red);font-size:1.3rem;margin-bottom:8px">🚨 RULE UPDATE! READ THIS FIRST 🚨</h3>
-    <p style="color:var(--text);font-size:.88rem;font-weight:600;margin-bottom:8px">The winner bet has been updated mid-tournament to make it more balanced. Previously losing cost you your full stake which was the same risk as an exact bet but far less reward.</p>
-    <p style="color:var(--text);font-size:.88rem">The winner bet is now <strong>completely free</strong>. No stake, no risk! Pick <strong>TWO(!) matches per day</strong> where you're confident on the winner. Get it right → +5pts. Wrong → nothing lost. Exact bets are unchanged and can be placed on every match.</p>
-  `;
-  container.appendChild(ruleBanner);
-
   const isAI    = currentUser === 'Claude' || currentUser === 'ChatGPT';
   const isAdmin = currentUser === 'Micole';
 
@@ -1064,9 +1053,18 @@ function renderMatchPredictions() {
   if (!container) return;
   container.innerHTML = '';
 
+  // RULE UPDATE BANNER
+  const ruleBanner = document.createElement('div');
+  ruleBanner.style.cssText = 'border:2px solid var(--red);background:rgba(255,71,87,.12);animation:pulse 2s infinite;text-align:center;max-width:600px;margin:0 auto 20px;padding:18px 24px;border-radius:var(--radius-lg);position:relative;z-index:1';
+  ruleBanner.innerHTML = `
+    <h3 style="color:var(--red);font-size:1.3rem;margin-bottom:8px">🚨 RULE UPDATE! READ THIS FIRST 🚨</h3>
+    <p style="color:var(--text);font-size:.88rem;font-weight:600;margin-bottom:8px">The winner bet has been updated mid-tournament to make it more balanced. Previously losing cost you your full stake which was the same risk as an exact bet but far less reward.</p>
+    <p style="color:var(--text);font-size:.88rem">The winner bet is now <strong>completely free</strong>. No stake, no risk! Pick <strong>TWO(!) matches per day</strong> where you're confident on the winner. Get it right → +5pts. Wrong → nothing lost. Exact bets are unchanged and can be placed on every match.</p>
+  `;
+  container.appendChild(ruleBanner);
+
   const isAI    = currentUser === 'Claude' || currentUser === 'ChatGPT';
   const isAdmin = currentUser === 'Micole';
-
   const scorePreds = isAI
     ? (currentUser === 'Claude' ? state.claudeScorePreds : state.chatgptScorePreds)
     : (state.scorePredictions[currentUser] || {});
