@@ -2107,6 +2107,16 @@ window.saveFinalStandings = saveFinalStandings;
 function renderRules() {
   const container = document.getElementById('rules-container');
   if (!container) return;
+  
+  //DELETE ON TUESDAY//
+container.innerHTML = `
+    <div class="rules-block" style="border:2px solid var(--teal);background:rgba(0,212,170,.08);text-align:center;">
+      <h3 style="color:var(--teal)">🎉 Week 1 Survival Bonus!</h3>
+      <p style="color:var(--text);font-size:.95rem;">Congratulations on surviving Week 1! Here's <strong>+10 betting points</strong>. Good luck this week! 🎲</p>
+    </div>
+    <div class="rules-block" style="border:2px solid var(--red);
+  // END DELETE ON TUESDAY//
+  
   container.innerHTML = `
     <div class="rules-block" style="border:2px solid var(--red);background:rgba(255,71,87,.12);animation:pulse 2s infinite;text-align:center;max-width:600px;margin:0 auto 14px;position:relative;z-index:1">
       <h3 style="color:var(--red);font-size:1.6rem">🚨 RULE UPDATE! READ THIS FIRST 🚨</h3>
