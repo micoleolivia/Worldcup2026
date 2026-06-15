@@ -1798,12 +1798,7 @@ function renderLeaderboard() {
   if (!container) return;
   container.innerHTML = '';
 
-  // ADD MONDAY — DELETE TUESDAY
-const topupBanner = document.createElement('div');
-topupBanner.className = 'weekly-topup-banner';
-topupBanner.innerHTML = `🎉 Congratulations on surviving Week 1! Here's +10 betting points on us — good luck this week! 🎲`;
-container.appendChild(topupBanner);
-// END ADD
+ 
 
   const actual     = calculateActualStandings();
   const hasResults = Object.keys(state.actualScores).length > 0;
@@ -1891,6 +1886,14 @@ container.appendChild(topupBanner);
   betSubtitle.textContent = 'Everyone starts with 50 pts — goes up or down based on bets only';
   container.appendChild(betSubtitle);
 
+   // ADD MONDAY — DELETE TUESDAY
+const topupBanner = document.createElement('div');
+topupBanner.className = 'weekly-topup-banner';
+topupBanner.innerHTML = `🎉 Congratulations on surviving Week 1! Here's +10 betting points. Good luck this week! 🎲`;
+container.appendChild(topupBanner);
+// END ADD
+
+  
   betScored.forEach((player, i) => {
     const startPts   = BETTING_STARTING_POINTS;
     const delta      = player.bettingPts - startPts;
