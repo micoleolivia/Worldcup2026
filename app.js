@@ -1300,7 +1300,7 @@ window.confirmBet = async function(matchId, dateKey, username) {
       return;
     }
     if (winnerBetsToday.length === 1) {
-      if (!confirm("⚠️ This is your LAST winner bet for this date! You won't be able to place any more. Are you sure?")) return;
+      if (!confirm("⚠️ This is your LAST winner bet for this date! You won't be able to place any more for this date. Are you sure?")) return;
     }
   }
   let betAmount = 0;
