@@ -449,7 +449,7 @@ function updateHeaderPoints() {
   if (!el || !currentUser) return;
   const isAI = currentUser === 'Claude' || currentUser === 'ChatGPT';
   const pts  = getBettingPoints(currentUser);
-  el.textContent = `${currentUser} · 🎲 ${pts} pts`;
+  el.textContent = `${currentUser} · 🎲 pool: ${pts}`;
 }
 
 // ============================================
