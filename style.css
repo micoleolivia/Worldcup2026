@@ -511,3 +511,17 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
   .groups-grid,.matches-grid{grid-template-columns:1fr}
   .login-title{font-size:70px}
 }
+
+
+/* ADD MONDAY — DELETE TUESDAY */
+.weekly-topup-banner {
+  background: rgba(245,197,24,.12);
+  border: 1px solid var(--gold);
+  color: var(--gold);
+  padding: 14px 18px;
+  border-radius: var(--radius-lg);
+  font-size: .88rem;
+  margin-bottom: 20px;
+  text-align: center;
+}
+/* END ADD */
