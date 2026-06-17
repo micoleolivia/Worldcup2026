@@ -1906,12 +1906,7 @@ function renderLeaderboard() {
   betSubtitle.textContent = 'Everyone starts with 50 pts — goes up or down based on bets only';
   container.appendChild(betSubtitle);
 
-   // ADD MONDAY — DELETE TUESDAY 
-const topupBanner = document.createElement('div');
-topupBanner.className = 'weekly-topup-banner';
-topupBanner.innerHTML = `🎉 Congratulations on surviving Week 1! Here's +10 betting points. Good luck this week! 🎲`;
-container.appendChild(topupBanner);
-// END ADD
+ 
 
   
   betScored.forEach((player, i) => {
