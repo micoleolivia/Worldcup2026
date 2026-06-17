@@ -354,6 +354,9 @@ function getBetForMatch(username, matchId) {
 // Called by saveActualScore. Updates bettingPoints and marks bets resolved.
 async function resolveBetsForMatch(matchId, actualScore) {
   const actual = actualScore;
+  // Reload latest score predictions from Firebase in case state is stale
+  const freshUsers = await loadFromFirebase('users');
+  const freshScorePreds = freshUsers.scorePredictions || {};
   let changed = false;
 
   PLAYERS.forEach(player => {
@@ -366,8 +369,8 @@ async function resolveBetsForMatch(matchId, actualScore) {
     if (bet.betType === 'exact') {
       // Find the player's score prediction for this match
       const pred = player.isAI
-        ? (player.name === 'Claude' ? state.claudeScorePreds[matchId] : state.chatgptScorePreds[matchId])
-        : (state.scorePredictions[player.name] || {})[matchId];
+  ? (player.name === 'Claude' ? state.claudeScorePreds[matchId] : state.chatgptScorePreds[matchId])
+  : (freshScorePreds[player.name] || {})[matchId];
 
        if (pred && pred.home === actual.home && pred.away === actual.away) {
         delta = bet.betAmount * EXACT_BET_WIN_MULTIPLIER;
