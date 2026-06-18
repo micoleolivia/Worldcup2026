@@ -188,6 +188,12 @@ const WINNER_BET_WIN          = 5;   // gain if winner bet correct
 const WINNER_BET_LOSE         = 0;   // lose if winner bet wrong
 const WEEKLY_TOPUP            = 10;  // pts added to everyone every Monday
 
+const ROUND_MATCHES = {
+  1: ['A1','A2','B1','B2','C1','C2','D1','D2','E1','E2','F1','F2','G1','G2','H1','H2','I1','I2','J1','J2','K1','K2','L1','L2'],
+  2: ['A3','A4','B3','B4','C3','C4','D3','D4','E3','E4','F3','F4','G3','G4','H3','H4','I3','I4','J3','J4','K3','K4','L3','L4'],
+  3: ['A5','A6','B5','B6','C5','C6','D5','D6','E5','E6','F5','F6','G5','G6','H5','H6','I5','I6','J5','J6','K5','K6','L5','L6'],
+};
+
 // ============================================
 // APP STATE
 // ============================================
@@ -209,6 +215,8 @@ let state = {
   bettingPoints: {},
   rescuedPlayers: {},  // tracks who has already received their one-time rescue
   lastTopupDate: null, // tracks the last date a weekly top-up was applied
+  currentRound: 1,
+  roundHistory: {},
 };
 
 let activeScoresFilter      = 'all';
@@ -481,6 +489,8 @@ async function login(name) {
   state.bettingPoints     = shared.bettingPoints      || {};
   state.rescuedPlayers    = shared.rescuedPlayers     || {};
   state.lastTopupDate     = shared.lastTopupDate      || null;
+  state.currentRound  = shared.currentRound  || 1;
+  state.roundHistory  = shared.roundHistory  || {};
 
   currentUser = name;
 
@@ -493,14 +503,14 @@ async function login(name) {
   const isAI    = name === 'Claude' || name === 'ChatGPT';
 
   document.getElementById('nav-scores').classList.toggle('hidden', !isAdmin);
-document.getElementById('nav-claude').classList.toggle('hidden', !isAdmin);
-document.getElementById('nav-chatgpt').classList.toggle('hidden', !isAdmin);
+ document.getElementById('nav-claude').classList.toggle('hidden', !isAdmin);
+ document.getElementById('nav-chatgpt').classList.toggle('hidden', !isAdmin);
   document.getElementById('nav-claude-winner').classList.toggle('hidden', !isAdmin);
-document.getElementById('nav-chatgpt-winner').classList.toggle('hidden', !isAdmin);
+ document.getElementById('nav-chatgpt-winner').classList.toggle('hidden', !isAdmin);
 
   document.getElementById('reset-btn').classList.toggle('hidden', !isAdmin);
   document.getElementById('topup-btn').classList.toggle('hidden', !isAdmin);
-
+  document.getElementById('close-round-btn').classList.toggle('hidden', !isAdmin);
   document.getElementById('nav-winner').classList.toggle('hidden', isAI);
   document.getElementById('nav-rankings').classList.toggle('hidden', false); // visible for everyone
   document.getElementById('nav-predictions').classList.toggle('hidden', false);
@@ -1838,9 +1848,10 @@ function renderLeaderboard() {
     let matchPts = 0, groupPts = 0;
     
     if (player.scorePreds) {
-      matches.forEach(match => {
-        const pred = player.scorePreds[match.id];
-        const act  = state.actualScores[match.id];
+      const roundMatchIds = ROUND_MATCHES[state.currentRound] || [];
+      roundMatchIds.forEach(matchId => {
+        const pred = player.scorePreds[matchId];
+        const act  = state.actualScores[matchId];
         if (pred && act) matchPts += scoreMatch(pred, act);
       });
     }
@@ -2220,6 +2231,37 @@ async function resetEverything() {
   renderLeaderboard();
   updateHeaderPoints();
 }
+async function closeRound() {
+  if (!confirm(`Close Round ${state.currentRound} and start fresh? This cannot be undone!`)) return;
+
+  // Snapshot current round scores for all players
+  const roundScores = {};
+  PLAYERS.forEach(player => {
+    let pts = 0;
+    const scorePreds = player.isAI
+      ? (player.name === 'Claude' ? state.claudeScorePreds : state.chatgptScorePreds)
+      : (state.scorePredictions[player.name] || {});
+    ROUND_MATCHES[state.currentRound].forEach(matchId => {
+      const pred = scorePreds[matchId];
+      const act  = state.actualScores[matchId];
+      if (pred && act) pts += scoreMatch(pred, act);
+    });
+    roundScores[player.name] = pts;
+  });
+
+  state.roundHistory[state.currentRound] = roundScores;
+  state.currentRound = state.currentRound + 1;
+
+  await saveToFirebase('shared', {
+    roundHistory: state.roundHistory,
+    currentRound: state.currentRound,
+  });
+
+  showToast(`Round ${state.currentRound - 1} closed! Round ${state.currentRound} starts now 🎉`, 'success');
+  renderLeaderboard();
+}
+window.closeRound = closeRound;
+
 window.resetEverything = resetEverything;
 
 
