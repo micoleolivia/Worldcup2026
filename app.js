@@ -1862,6 +1862,11 @@ function renderLeaderboard() {
   const classes = ['first','second','third','','','',''];
 
   // ── TABLE 1: Predictions ──
+  const roundBanner = document.createElement('div');
+  roundBanner.style.cssText = 'border:2px solid var(--teal);background:rgba(0,212,170,.08);text-align:center;padding:14px 18px;border-radius:var(--radius-lg);margin-bottom:20px;';
+  roundBanner.innerHTML = `<h3 style="color:var(--teal);font-size:1.1rem">🏁 Round 1 is closed — Round 2 begins! 🏁</h3><p style="color:var(--text);font-size:.85rem;margin-top:6px">Well done to our Round 1 winner <strong>🦥 Zac</strong>! Can anyone dethrone him in Round 2? 👀</p>`;
+  container.appendChild(roundBanner);
+
   const predTitle = document.createElement('div');
   predTitle.className = 'lb-section-title';
   predTitle.innerHTML = '⚽ Predictions Leaderboard';
