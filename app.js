@@ -365,8 +365,11 @@ async function resolveBetsForMatch(matchId, actualScore) {
   // Reload latest score predictions from Firebase in case state is stale
   const freshUsers = await loadFromFirebase('users');
   const freshScorePreds = freshUsers.scorePredictions || {};
+  // Reload fresh betting points to avoid stale state
+  const freshShared = await loadFromFirebase('shared');
+  state.bettingPoints = freshShared.bettingPoints || state.bettingPoints;
+  state.bets = freshShared.bets || state.bets;
   let changed = false;
-
   PLAYERS.forEach(player => {
     const bet = getBetForMatch(player.name, matchId);
     if (!bet || bet.resolved) return; // no bet or already resolved
