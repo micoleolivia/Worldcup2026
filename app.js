@@ -381,8 +381,8 @@ async function resolveBetsForMatch(matchId, actualScore) {
       // Find the player's score prediction
       const pred = player.isAI
         ? (player.name === 'Claude' ? state.claudeScorePreds[matchId] : state.chatgptScorePreds[matchId])
-        : (state.scorePredictions[player.name] || {})[matchId];
-
+        : (freshScorePreds[player.name] || {})[matchId];
+      
       if (pred) {
         const predResult = pred.home > pred.away ? 'H' : pred.home < pred.away ? 'A' : 'D';
         const actResult  = actual.home > actual.away ? 'H' : actual.home < actual.away ? 'A' : 'D';
