@@ -2119,13 +2119,10 @@ function renderRules() {
   
 
 container.innerHTML = `
-    <div class="rules-block" style="border:2px solid var(--teal);background:rgba(0,212,170,.08);text-align:center;">
-      
-    <div class="rules-block" style="border:2px solid var(--red);background:rgba(255,71,87,.12);animation:pulse 2s infinite;text-align:center;max-width:600px;margin:0 auto 14px;position:relative;z-index:1">
-      <h3 style="color:var(--red);font-size:1.6rem">🚨 RULE UPDATE! READ THIS FIRST 🚨</h3>
-      <p style="color:var(--text);font-size:.95rem;font-weight:600">The winner bet has been updated mid-tournament to make it more balanced. Previously losing cost you your full stake which was the same risk as an exact bet but far less reward.</p>
-<p style="color:var(--text);margin-top:8px">The winner bet is now <strong>completely free</strong>. No stake, no risk! Pick <strong>TWO(!) matches per day</strong> where you're confident on the winner. Get it right → +5pts. Wrong → Nothing lost. Exact bets are unchanged and can be placed on every match.</p>
-      </div>
+    <div class="rules-block" style="border:2px solid var(--teal);background:rgba(0,212,170,.08);text-align:center;max-width:600px;margin:0 auto 14px;">
+      <h3 style="color:var(--teal);font-size:1.4rem">🏁 Round 1 is closed — Round 2 begins! 🏁</h3>
+      <p style="color:var(--text);margin-top:8px">Well done to our Round 1 winner <strong>🦥 Zac</strong>! Can anyone dethrone him in Round 2? 👀</p>
+    </div>
     <div class="rules-block">
       <h3>Before the Tournament — Your To-Do List</h3>
       <p>Before the first match kicks off, make sure you've done all three of these:</p>
