@@ -1144,6 +1144,8 @@ function renderMatchPredictions() {
         }
       } else if (locked) {
         predictionHTML = `<div class="match-locked">🔒 ${match.home} ${saved.home} – ${saved.away} ${match.away}</div>`;
+      } else if (resultIn) {
+        predictionHTML = `<div class="match-locked" style="opacity:0.4;font-style:italic">No prediction entered</div>`;
       } else {
         predictionHTML = `
           <div class="score-inputs">
@@ -1348,6 +1350,10 @@ async function saveMatchPrediction(matchId) {
   const home = parseInt(document.getElementById(`pred-home-${matchId}`)?.value);
   const away = parseInt(document.getElementById(`pred-away-${matchId}`)?.value);
   if (isNaN(home)||isNaN(away)) { showToast('Enter both scores!','error'); return; }
+  if (state.actualScores[matchId] !== undefined) {
+    showToast('Result already in — prediction window closed!', 'error');
+    return;
+  }
   if (!confirm('Lock this prediction? Cannot be changed! 🔒')) return;
 
   if (!state.scorePredictions[currentUser]) state.scorePredictions[currentUser] = {};
