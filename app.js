@@ -360,40 +360,38 @@ function getBetForMatch(username, matchId) {
 
 // Resolve bets for a given match when the actual score is entered.
 // Called by saveActualScore. Updates bettingPoints and marks bets resolved.
+// Fetches a FRESH copy from Firestore first — relying on in-memory state.bets
+// is unsafe here because the live onSnapshot listener can overwrite it mid-flight.
 async function resolveBetsForMatch(matchId, actualScore) {
   const actual = actualScore;
-  // Reload latest score predictions from Firebase in case state is stale
-  const freshUsers = await loadFromFirebase('users');
-  const freshScorePreds = freshUsers.scorePredictions || {};
-  // Reload fresh betting points to avoid stale state
-  const freshShared = await loadFromFirebase('shared');
-  state.bettingPoints = freshShared.bettingPoints || state.bettingPoints;
-  state.bets = freshShared.bets || state.bets;
-  let changed = false;
+
+  const fresh = await loadFromFirebase('shared');
+  const freshBets          = fresh.bets          || {};
+  const freshBettingPoints = fresh.bettingPoints || {};
+  const freshRescued       = fresh.rescuedPlayers || {};
+
   PLAYERS.forEach(player => {
-    const bet = getBetForMatch(player.name, matchId);
+    const bet = (freshBets[player.name] || {})[matchId];
     if (!bet || bet.resolved) return; // no bet or already resolved
 
-    const currentPoints = getBettingPoints(player.name);
+    const currentPoints = freshBettingPoints[player.name] ?? BETTING_STARTING_POINTS;
     let delta = 0;
 
     if (bet.betType === 'exact') {
-      // Find the player's score prediction for this match
       const pred = player.isAI
-  ? (player.name === 'Claude' ? state.claudeScorePreds[matchId] : state.chatgptScorePreds[matchId])
-  : (freshScorePreds[player.name] || {})[matchId];
+        ? (player.name === 'Claude' ? state.claudeScorePreds[matchId] : state.chatgptScorePreds[matchId])
+        : (state.scorePredictions[player.name] || {})[matchId];
 
-       if (pred && pred.home === actual.home && pred.away === actual.away) {
+      if (pred && pred.home === actual.home && pred.away === actual.away) {
         delta = bet.betAmount * EXACT_BET_WIN_MULTIPLIER;
       } else {
         delta = -bet.betAmount;
       }
     } else if (bet.betType === 'winner') {
-      // Find the player's score prediction
       const pred = player.isAI
         ? (player.name === 'Claude' ? state.claudeScorePreds[matchId] : state.chatgptScorePreds[matchId])
-        : (freshScorePreds[player.name] || {})[matchId];
-      
+        : (state.scorePredictions[player.name] || {})[matchId];
+
       if (pred) {
         const predResult = pred.home > pred.away ? 'H' : pred.home < pred.away ? 'A' : 'D';
         const actResult  = actual.home > actual.away ? 'H' : actual.home < actual.away ? 'A' : 'D';
@@ -401,30 +399,31 @@ async function resolveBetsForMatch(matchId, actualScore) {
       }
     }
 
-    // Points can never go below 0
     // Points can never go below 0 — one-time secret 10pt rescue if they hit 0
     const newPoints = Math.max(0, currentPoints + delta);
-    if (newPoints === 0 && !state.rescuedPlayers[player.name]) {
-      state.bettingPoints[player.name] = 10;
-      state.rescuedPlayers[player.name] = true;
+    if (newPoints === 0 && !freshRescued[player.name]) {
+      freshBettingPoints[player.name] = 10;
+      freshRescued[player.name] = true;
     } else {
-      state.bettingPoints[player.name] = newPoints;
+      freshBettingPoints[player.name] = newPoints;
     }
 
-    // Mark bet as resolved and store the delta for display
-    if (!state.bets[player.name]) state.bets[player.name] = {};
-    state.bets[player.name][matchId] = { ...bet, resolved: true, pointsDelta: delta };
-    changed = true;
+    if (!freshBets[player.name]) freshBets[player.name] = {};
+    freshBets[player.name][matchId] = { ...bet, resolved: true, pointsDelta: delta };
   });
 
-  await saveToFirebase('shared', {
-      bets: state.bets,
-      bettingPoints: state.bettingPoints,
-      rescuedPlayers: state.rescuedPlayers,
-    });
-    updateHeaderPoints();
-}
+  // Reflect locally right away so the UI updates without waiting on the listener
+  state.bets           = freshBets;
+  state.bettingPoints  = freshBettingPoints;
+  state.rescuedPlayers = freshRescued;
 
+  await saveToFirebase('shared', {
+    bets: freshBets,
+    bettingPoints: freshBettingPoints,
+    rescuedPlayers: freshRescued,
+  });
+  updateHeaderPoints();
+}
 // Save a bet placed by the current user (or admin on behalf of AI)
 async function saveBet(matchId, betType, betAmount, dateKey, forUser = null) {
   const username = forUser || currentUser;
