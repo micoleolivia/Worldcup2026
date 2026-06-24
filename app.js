@@ -2111,9 +2111,7 @@ function renderRules() {
   
 
 container.innerHTML = `
-    <div class="rules-block" style="border:2px solid var(--teal);background:rgba(0,212,170,.08);text-align:center;max-width:600px;margin:0 auto 14px;">
-      
-    </div>
+   
     <div class="rules-block">
       <h3>Before the Tournament — Your To-Do List</h3>
       <p>Before the first match kicks off, make sure you've done all three of these:</p>
