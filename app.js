@@ -1859,7 +1859,7 @@ function renderLeaderboard() {
   // ── TABLE 1: Predictions ──
   const roundBanner = document.createElement('div');
   roundBanner.style.cssText = 'border:2px solid var(--teal);background:rgba(0,212,170,.08);text-align:center;padding:14px 18px;border-radius:var(--radius-lg);margin-bottom:20px;';
-  roundBanner.innerHTML = `<h3 style="color:var(--teal);font-size:1.1rem">🏁 Round 1 is closed — Round 2 begins! 🏁</h3><p style="color:var(--text);font-size:.85rem;margin-top:6px">Well done to our Round 1 winner <strong>🦥 Zac</strong>! Can anyone dethrone him in Round 2? 👀</p>`;
+  roundBanner.innerHTML = `<h3 style="color:var(--teal);font-size:1.1rem">🏁 Round 2 is closed — The Final Round begins! 🏁</h3><p style="color:var(--text);font-size:.85rem;margin-top:6px"> Round 2 was taken by both AI's <strong>🦥 Zac</strong>! Can anyone dethrone them in Round 3? 👀</p>`;
   container.appendChild(roundBanner);
 
   const predTitle = document.createElement('div');
@@ -2112,8 +2112,7 @@ function renderRules() {
 
 container.innerHTML = `
     <div class="rules-block" style="border:2px solid var(--teal);background:rgba(0,212,170,.08);text-align:center;max-width:600px;margin:0 auto 14px;">
-      <h3 style="color:var(--teal);font-size:1.4rem">🏁 Round 1 is closed — Round 2 begins! 🏁</h3>
-      <p style="color:var(--text);margin-top:8px">Well done to our Round 1 winner <strong>🦥 Zac</strong>! Can anyone dethrone him in Round 2? 👀</p>
+      
     </div>
     <div class="rules-block">
       <h3>Before the Tournament — Your To-Do List</h3>
