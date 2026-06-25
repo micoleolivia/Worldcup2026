@@ -415,6 +415,10 @@ async function resolveBetsForMatch(matchId, actualScore) {
 async function saveBet(matchId, betType, betAmount, dateKey, forUser = null) {
   const username = forUser || currentUser;
 
+  const freshShared = await loadFromFirebase('shared');
+  state.bets         = freshShared.bets         || {};
+  state.bettingPoints = freshShared.bettingPoints || {};
+
   if (!state.bets[username]) state.bets[username] = {};
   state.bets[username][matchId] = {
     betType,
