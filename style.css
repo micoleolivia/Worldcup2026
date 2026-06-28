@@ -525,3 +525,32 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
   text-align: center;
 }
 /* END ADD */
+
+
+/* LEADERBOARD ROUND BREAKDOWN */
+.lb-rounds {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  flex-wrap: wrap;
+}
+.lb-round {
+  font-size: .72rem;
+  color: var(--text2);
+}
+.lb-round strong {
+  color: var(--text);
+  font-weight: 700;
+}
+.lb-round-sep {
+  color: var(--text3);
+  font-size: .7rem;
+}
+.lb-total-col {
+  text-align: right;
+  flex-shrink: 0;
+}
+.lb-total {
+  color: var(--teal) !important;
+}
