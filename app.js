@@ -1976,17 +1976,18 @@ function renderStandingsAccuracy() {
   document.getElementById('standings-coming-soon').classList.add('hidden');
 
   const official = getOfficialStandings();
-  const playerData = [
-    { name:'Micole',  icon:'🐻', preds:state.predictions['Micole'] },
-    { name:'Mom',     icon:'🦒', preds:state.predictions['Mom'] },
-    { name:'Zac',     icon:'🦥', preds:state.predictions['Zac'] },
-    { name:'Claude',  icon:'🤖', preds:claudeGroupPredictions },
-    { name:'ChatGPT', icon:'🦾', preds:chatgptGroupPredictions },
-  ];
-
+ const playerData = [
+  { name:'Micole',   icon:'🐻', preds:state.predictions['Micole'] },
+  { name:'Mom',      icon:'🦒', preds:state.predictions['Mom'] },
+  { name:'Zac',      icon:'🦥', preds:state.predictions['Zac'] },
+  { name:'Sean',     icon:'🦅', preds:state.predictions['Sean'] },
+  { name:'Patricia', icon:'🦩', preds:state.predictions['Patricia'] },
+  { name:'Claude',   icon:'🤖', preds:claudeGroupPredictions },
+  { name:'ChatGPT',  icon:'🦾', preds:chatgptGroupPredictions },
+];
   const scored = playerData.map(p => ({ ...p, ...calcAccuracy(p.preds, official) })).sort((a,b) => b.pct - a.pct);
-  const medals  = ['🥇','🥈','🥉','4️⃣','5️⃣'];
-  const classes = ['first','second','third','',''];
+  const medals  = ['🥇','🥈','🥉','4️⃣','5️⃣','6️⃣','7️⃣'];
+const classes = ['first','second','third','','','',''];
 
   const accContainer = document.getElementById('standings-accuracy-container');
   accContainer.innerHTML = '';
@@ -2014,8 +2015,8 @@ function renderStandingsAccuracy() {
     card.className = 'standings-card';
     const actual = official[g] || [];
     const rows = actual.map((team, i) => {
-      const cols = ['Micole','Mom','Zac','Claude','ChatGPT'].map(name => {
-        const preds = name==='Claude' ? claudeGroupPredictions : name==='ChatGPT' ? chatgptGroupPredictions : state.predictions[name];
+      ['Micole','Mom','Zac','Sean','Patricia','Claude','ChatGPT'].map(name => {
+  const preds = name==='Claude' ? claudeGroupPredictions : name==='ChatGPT' ? chatgptGroupPredictions : state.predictions[name];
         const pos = preds?.[g]?.indexOf(team) ?? -1;
         const icon = pos === i ? '✅' : Math.abs(pos - i) === 1 ? '〰️' : '❌';
         return `<td class="sbd-cell">${icon}</td>`;
@@ -2025,7 +2026,7 @@ function renderStandingsAccuracy() {
     card.innerHTML = `
       <h4>Group ${g}</h4>
       <table class="standings-breakdown-table">
-        <thead><tr><th></th><th>Actual</th><th>🐻</th><th>🦒</th><th>🦥</th><th>🤖</th><th>🦾</th></tr></thead>
+        <thead><tr><th></th><th>Actual</th><th>🐻</th><th>🦒</th><th>🦥</th><th>🦅</th><th>🦩</th><th>🤖</th><th>🦾</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>`;
     bdContainer.appendChild(card);
