@@ -1834,19 +1834,28 @@ function renderLeaderboard() {
     { name:'ChatGPT',  icon:'🦾', type:'AI',    groupPreds:chatgptGroupPredictions,       scorePreds:state.chatgptScorePreds },
   ];
   
+// Round buckets: R1 = matchday 1 (IDs ending in 1/2), R2 = matchday 2 (3/4), R3 = matchday 3 (5/6)
+  const r1Ids = new Set(matches.filter(m => /[12]$/.test(m.id)).map(m => m.id));
+  const r2Ids = new Set(matches.filter(m => /[34]$/.test(m.id)).map(m => m.id));
+  const r3Ids = new Set(matches.filter(m => /[56]$/.test(m.id)).map(m => m.id));
+
   // --- Compute prediction scores ---
   const predScored = playerData.map(player => {
-    let matchPts = 0, groupPts = 0;
-    
+    let r1Pts = 0, r2Pts = 0, r3Pts = 0;
+
     if (player.scorePreds) {
-      const roundMatchIds = ROUND_MATCHES[state.currentRound] || [];
-      roundMatchIds.forEach(matchId => {
-        const pred = player.scorePreds[matchId];
-        const act  = state.actualScores[matchId];
-        if (pred && act) matchPts += scoreMatch(pred, act);
+      matches.forEach(match => {
+        const pred = player.scorePreds[match.id];
+        const act  = state.actualScores[match.id];
+        if (!pred || !act) return;
+        const pts = scoreMatch(pred, act);
+        if (r1Ids.has(match.id)) r1Pts += pts;
+        else if (r2Ids.has(match.id)) r2Pts += pts;
+        else if (r3Ids.has(match.id)) r3Pts += pts;
       });
     }
-    return { ...player, matchPts, groupPts: 0, points: matchPts };
+    const matchPts = r1Pts + r2Pts + r3Pts;
+    return { ...player, r1Pts, r2Pts, r3Pts, matchPts, points: matchPts };
   });
   predScored.sort((a,b) => b.points - a.points);
 
@@ -1880,17 +1889,22 @@ function renderLeaderboard() {
         <div class="lb-name">${player.icon} ${player.name} ${state.rescuedPlayers[player.name] ? '🆘 rescued' : ''}</div>
         <div class="lb-type">${player.type}</div>
         ${hasResults
-         ? `<div class="lb-breakdown">Match predictions: +${player.matchPts}pts</div>`
+          ? `<div class="lb-rounds">
+               <span class="lb-round">R1 <strong>+${player.r1Pts}</strong></span>
+               <span class="lb-round-sep">·</span>
+               <span class="lb-round">R2 <strong>+${player.r2Pts}</strong></span>
+               <span class="lb-round-sep">·</span>
+               <span class="lb-round">R3 <strong>+${player.r3Pts}</strong></span>
+             </div>`
           : `<div class="lb-breakdown" style="color:var(--text3);font-style:italic">Waiting for results…</div>`}
       </div>
-      <div>
-        <div class="lb-points">+${player.points}</div>
-        <div class="lb-pts-label">PTS</div>
+      <div class="lb-total-col">
+        <div class="lb-points lb-total">+${player.points}</div>
+        <div class="lb-pts-label">TOTAL</div>
       </div>
     `;
     container.appendChild(row);
   });
-
   if (!hasResults) {
     const empty = document.createElement('div');
     empty.className = 'leaderboard-empty';
