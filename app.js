@@ -2029,8 +2029,8 @@ const classes = ['first','second','third','','','',''];
     card.className = 'standings-card';
     const actual = official[g] || [];
     const rows = actual.map((team, i) => {
-      ['Micole','Mom','Zac','Sean','Patricia','Claude','ChatGPT'].map(name => {
-  const preds = name==='Claude' ? claudeGroupPredictions : name==='ChatGPT' ? chatgptGroupPredictions : state.predictions[name];
+      const cols = ['Micole','Mom','Zac','Sean','Patricia','Claude','ChatGPT'].map(name => {
+        const preds = name==='Claude' ? claudeGroupPredictions : name==='ChatGPT' ? chatgptGroupPredictions : state.predictions[name];
         const pos = preds?.[g]?.indexOf(team) ?? -1;
         const icon = pos === i ? '✅' : Math.abs(pos - i) === 1 ? '〰️' : '❌';
         return `<td class="sbd-cell">${icon}</td>`;
